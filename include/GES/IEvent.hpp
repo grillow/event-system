@@ -1,13 +1,10 @@
 #pragma once
-#include "ISender.hpp"
+#include <string>
 
 
 struct IEvent {
 public:
-    IEvent(ISender & sender);
     virtual ~IEvent();
-
-private:
-    ISender & m_sender;
+    virtual std::string Type() = 0;
 };
 
