@@ -9,6 +9,10 @@ set(include_dest "${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}")
 set(source_dest "${CMAKE_SOURCE_DIR}/src")
 set(main_lib_dest "${CMAKE_SOURCE_DIR}/lib/${PROJECT_NAME}")
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+
+
 add_subdirectory(src)
 add_subdirectory(example)
 add_subdirectory(test)
