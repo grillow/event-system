@@ -2,25 +2,26 @@
 #include "EventBus.hpp"
 
 #include <map>
-#include <unordered_map>
 #include <list>
 
 struct EventBus::Impl {
 public:
-    Impl();
+    Impl(EventBus & bus);
     
     void Dispatch(const IEvent & event);
     
-    EventListenerHandle Add(std::unique_ptr<IEventListener> listener);
+    EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
     
     void Remove(const EventListenerHandle & handle);
 
 private:
+    EventBus & m_bus;
+
     std::map<
         std::string,
-        std::unordered_map<
+        std::map<
             const EventListenerHandle,
-            std::unique_ptr<IEventListener>
+            std::unique_ptr<IEventListenerBase>
         >
     > m_listeners;
 

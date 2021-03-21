@@ -4,7 +4,7 @@
 
 struct IEvent {
 public:
-    virtual ~IEvent();
-    virtual std::string Type() = 0;
+    virtual ~IEvent() = default;
+    virtual std::string Type() const = 0;
 };
 

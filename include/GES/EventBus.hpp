@@ -4,14 +4,11 @@
 #include "EventListenerHandle.hpp"
 
 #include <memory>
-#include <typeindex>
-#include <unordered_map>
-#include <list>
 
 struct EventBus final {
 public:
     EventBus();
-    ~EventBus() = default;
+    ~EventBus();
 
     EventBus(const EventBus & other) = delete;
 
