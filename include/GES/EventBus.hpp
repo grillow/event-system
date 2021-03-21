@@ -15,7 +15,7 @@ public:
     void Dispatch(const IEvent & event);
 
     EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
-    void Remove(const EventListenerHandle & handle);
+    void Remove(EventListenerHandle && handle);
 
 private:
     struct Impl;

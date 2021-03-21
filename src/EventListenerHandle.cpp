@@ -2,8 +2,15 @@
 #include "EventBus.hpp"
 
 
+EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
+    EventListenerHandle(other.m_bus, other.m_id) {
+    other.m_destroyed = true;
+}
+
 EventListenerHandle::~EventListenerHandle() {
-    m_bus.Remove(*this);
+    if (!m_destroyed) {
+        m_bus.Remove(std::move(*this));
+    }
 }
 
 
@@ -15,6 +22,7 @@ bool operator< (const EventListenerHandle & left,
 
 EventListenerHandle::EventListenerHandle(EventBus & bus, const uint64_t id) :
         m_bus(bus),
-        m_id(id)
+        m_id(id),
+        m_destroyed(false)
     {}
 

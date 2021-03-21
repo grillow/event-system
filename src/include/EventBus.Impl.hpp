@@ -12,7 +12,7 @@ public:
     
     EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
     
-    void Remove(const EventListenerHandle & handle);
+    void Remove(EventListenerHandle && handle);
 
 private:
     EventBus & m_bus;
@@ -20,7 +20,7 @@ private:
     std::map<
         std::string,
         std::map<
-            const EventListenerHandle,
+            EventListenerHandle,
             std::unique_ptr<IEventListenerBase>
         >
     > m_listeners;
