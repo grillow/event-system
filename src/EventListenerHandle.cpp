@@ -26,3 +26,8 @@ EventListenerHandle::EventListenerHandle(EventBus & bus, const uint64_t id) :
         m_destroyed(false)
     {}
 
+
+EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle & handle) :
+        m_id(handle.m_id)
+    {}
+

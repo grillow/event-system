@@ -3,6 +3,7 @@
 
 #include <map>
 #include <list>
+#include <utility>
 
 struct EventBus::Impl {
 public:
@@ -19,9 +20,11 @@ private:
 
     std::map<
         std::string,
-        std::map<
-            EventListenerHandle,
-            std::unique_ptr<IEventListenerBase>
+        std::list<
+            std::pair<
+                EventListenerHandleHidden,
+                std::unique_ptr<IEventListenerBase>
+            >
         >
     > m_listeners;
 

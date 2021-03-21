@@ -1,5 +1,6 @@
 #include "EventBus.Impl.hpp"
-#include <iostream>
+
+
 EventBus::Impl::Impl(EventBus & bus) : m_bus(bus), m_nlisteners(0) {}
 
 void EventBus::Impl::Dispatch(const IEvent & event) {
@@ -10,17 +11,19 @@ void EventBus::Impl::Dispatch(const IEvent & event) {
 
 EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
     EventListenerHandle handle(m_bus, m_nlisteners++);
-    m_listeners[listener->Type()][handle] = std::move(listener);
+    m_listeners[listener->Type()].emplace_back(EventListenerHandleHidden(handle), std::move(listener));
     return handle;
 }
 
 void EventBus::Impl::Remove(EventListenerHandle && handle) {
-    std::cout << "b\n";
     for (auto & listeners : m_listeners) {
-        auto it = listeners.second.find(handle);
-        if (it != listeners.second.end()) {
-            listeners.second.erase(it);
-            --m_nlisteners;
+        auto it = listeners.second.begin();
+        while (it != listeners.second.end()) {
+            if ((*it).first.m_id == handle.m_id) {
+                it = listeners.second.erase(it);
+            } else {
+                ++it;
+            }
         }
     }
 }

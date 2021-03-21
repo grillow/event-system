@@ -5,9 +5,9 @@ struct EventBus;
 
 struct EventListenerHandle final {
 friend struct EventBus;
+friend struct EventListenerHandleHidden;
 public:
-    //EventListenerHandle(const EventListenerHandle & other) = delete;
-    EventListenerHandle(const EventListenerHandle & other) = default;
+    EventListenerHandle(const EventListenerHandle & other) = delete;
     EventListenerHandle(EventListenerHandle && other);
     ~EventListenerHandle();
 
@@ -23,5 +23,10 @@ private:
 
     bool m_destroyed;
 
+};
+
+struct EventListenerHandleHidden final {
+    EventListenerHandleHidden(const EventListenerHandle & handle);
+    const uint64_t m_id;
 };
 
