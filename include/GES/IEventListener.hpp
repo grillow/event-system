@@ -6,7 +6,7 @@
 
 struct IEventListenerBase {
     virtual ~IEventListenerBase() = default;
-    virtual void Dispatch(const IEvent & event) = 0;
+    virtual void Dispatch(IEvent & event) = 0;
     virtual std::string Type() const = 0;
 };
 
@@ -19,11 +19,11 @@ public:
                 "IEventListener<T>: T must inherit from IEvent");
     }
 
-    void Dispatch(const IEvent & event) override {
-        OnEvent(dynamic_cast<const T &>(event));
+    void Dispatch(IEvent & event) override {
+        OnEvent(dynamic_cast<T &>(event));
     }
 
-    virtual void OnEvent(const T & event) = 0;
+    virtual void OnEvent(T & event) = 0;
 
 };
 

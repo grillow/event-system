@@ -20,7 +20,7 @@ struct ExampleEventListener : public IEventListener<ExampleEvent> {
         return "ExampleEvent";
     }
 
-    virtual void OnEvent(const ExampleEvent & event) override {
+    virtual void OnEvent(ExampleEvent & event) override {
         std::cout << event.number << std::endl;
     }
 };
