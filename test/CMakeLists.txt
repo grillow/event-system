@@ -23,3 +23,5 @@ target_link_libraries(${PROJECT_NAME} GES_LIBRARY)
 target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} pthread)
 
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+
