@@ -16,6 +16,8 @@ public:
     void Remove(EventListenerHandle && handle);
 
 private:
+    struct EventListenerHandleHidden;
+
     EventBus & m_bus;
 
     std::map<
@@ -30,5 +32,11 @@ private:
 
     uint64_t m_nlisteners;
 
+};
+
+
+struct EventBus::Impl::EventListenerHandleHidden final {
+    EventListenerHandleHidden(const EventListenerHandle & handle);
+    const uint64_t m_id;
 };
 

@@ -1,5 +1,6 @@
 #include "EventListenerHandle.hpp"
 #include "EventBus.hpp"
+#include "EventBus.Impl.hpp"
 
 
 EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
@@ -27,7 +28,7 @@ EventListenerHandle::EventListenerHandle(EventBus & bus, const uint64_t id) :
     {}
 
 
-EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle & handle) :
+EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle & handle) :
         m_id(handle.m_id)
     {}
 
