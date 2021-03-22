@@ -3,8 +3,8 @@
 
 #include <list>
 
-// global :3
-EventBus bus;
+
+EventBus bus; // global :3
 
 
 struct ExampleEvent : public IEvent {
@@ -59,7 +59,6 @@ int main() {
         bus.Raise(std::make_unique<ExampleEvent>(1488));
     }
     
-
 
     return 0;
 }
