@@ -1,6 +1,8 @@
 #include <iostream>
 #include <GES/EventBus.hpp>
 
+#include <list>
+
 // global :3
 EventBus bus;
 
@@ -20,15 +22,22 @@ struct ExampleEventListener : public IEventListener<ExampleEvent> {
         return "ExampleEvent";
     }
 
+    ExampleEventListener(std::string name) : m_name(std::move(name)) {}
+
     virtual void OnEvent(ExampleEvent & event) override {
-        std::cout << event.number << std::endl;
+        std::cout << m_name << " received: " << event.number << std::endl;
     }
+
+private:
+    const std::string m_name;
 };
 
 struct ExampleStruct {
 public:
-    ExampleStruct() : m_handle(bus.Add(std::make_unique<ExampleEventListener>())) {
+    ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
+        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerA")));
+        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerB")));
     }
 
     ~ExampleStruct() {
@@ -36,7 +45,7 @@ public:
     }
 
 private:
-    EventListenerHandle m_handle;
+    std::list<EventListenerHandle> m_handles;
 
 };
 
@@ -47,6 +56,7 @@ int main() {
         ExampleStruct sample;
 
         bus.Raise(std::make_unique<ExampleEvent>(1337));
+        bus.Raise(std::make_unique<ExampleEvent>(1488));
     }
     
 
