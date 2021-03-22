@@ -46,8 +46,7 @@ int main() {
     {
         ExampleStruct sample;
 
-        ExampleEvent event(1337);
-        bus.Dispatch(event);
+        bus.Raise(std::make_unique<ExampleEvent>(1337));
     }
     
 

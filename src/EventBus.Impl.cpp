@@ -3,9 +3,9 @@
 
 EventBus::Impl::Impl(EventBus & bus) : m_bus(bus), m_nlisteners(0) {}
 
-void EventBus::Impl::Dispatch(IEvent & event) {
-    for (auto & listener : m_listeners[event.Type()]) {
-        listener.second->Dispatch(event);
+void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
+    for (auto & listener : m_listeners[event->Type()]) {
+        listener.second->Receive(*event);
     }
 }
 
@@ -38,8 +38,8 @@ EventBus::EventBus() : m_pimpl(std::make_unique<EventBus::Impl>(*this)) {}
 
 EventBus::~EventBus() = default;
 
-void EventBus::Dispatch(IEvent & event) {
-    m_pimpl->Dispatch(event);
+void EventBus::Raise(std::unique_ptr<IEvent> event) {
+    m_pimpl->Raise(std::move(event));
 }
 
 EventListenerHandle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {

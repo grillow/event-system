@@ -12,7 +12,7 @@ public:
 
     EventBus(const EventBus & other) = delete;
 
-    void Dispatch(IEvent & event);
+    void Raise(std::unique_ptr<IEvent> event);
 
     EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
     void Remove(EventListenerHandle && handle);
