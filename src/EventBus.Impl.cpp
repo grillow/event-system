@@ -21,6 +21,7 @@ void EventBus::Impl::Remove(EventListenerHandle && handle) {
         while (it != listeners.second.end()) {
             if ((*it).first.m_id == handle.m_id) {
                 it = listeners.second.erase(it);
+                --m_nlisteners;
             } else {
                 ++it;
             }
