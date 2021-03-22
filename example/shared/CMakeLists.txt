@@ -11,7 +11,7 @@ set_target_properties(GES_LIBRARY PROPERTIES
 
 
 # executable
-file(GLOB SOURCES *.cpp)
+file(GLOB SOURCES ../*.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} GES_LIBRARY)
