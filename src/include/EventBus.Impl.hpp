@@ -7,7 +7,7 @@
 
 struct EventBus::Impl {
 public:
-    Impl(EventBus & bus);
+    Impl(std::shared_ptr<EventBus> bus);
     
     void Raise(std::unique_ptr<IEvent> event);
     
@@ -18,7 +18,7 @@ public:
 private:
     struct EventListenerHandleHidden;
 
-    EventBus & m_bus;
+    std::weak_ptr<EventBus> m_bus;
 
     std::map<
         std::string,

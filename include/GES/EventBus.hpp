@@ -5,7 +5,7 @@
 
 #include <memory>
 
-struct EventBus final {
+struct EventBus final : public std::enable_shared_from_this<EventBus> {
 public:
     EventBus();
     ~EventBus();

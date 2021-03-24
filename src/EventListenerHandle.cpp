@@ -10,7 +10,11 @@ EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
 
 EventListenerHandle::~EventListenerHandle() {
     if (!m_destroyed) {
-        m_bus.Remove(std::move(*this));
+	if (auto bus = m_bus.lock()) {
+	    bus->Remove(std::move(*this));
+	} else { // anti-idiot
+	    ///TODO: handle this error
+	}
     }
 }
 
@@ -21,7 +25,7 @@ bool operator< (const EventListenerHandle & left,
 }
 
 
-EventListenerHandle::EventListenerHandle(EventBus & bus, const uint64_t id) :
+EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id) :
         m_bus(bus),
         m_id(id),
         m_destroyed(false)

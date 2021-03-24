@@ -4,7 +4,7 @@
 #include <list>
 
 
-EventBus bus; // global :3
+std::shared_ptr<EventBus> bus(std::make_shared<EventBus>()); // global :3
 
 
 struct ExampleEvent : public IEvent {
@@ -36,8 +36,8 @@ struct ExampleStruct {
 public:
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
-        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerA")));
-        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerB")));
+        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerA")));
+        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerB")));
     }
 
     ~ExampleStruct() {
@@ -55,8 +55,8 @@ int main() {
     {
         ExampleStruct sample;
 
-        bus.Raise(std::make_unique<ExampleEvent>(1337));
-        bus.Raise(std::make_unique<ExampleEvent>(1488));
+        bus->Raise(std::make_unique<ExampleEvent>(1337));
+        bus->Raise(std::make_unique<ExampleEvent>(1488));
     }
     
 

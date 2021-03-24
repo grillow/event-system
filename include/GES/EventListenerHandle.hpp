@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <memory>
 
 struct EventBus;
 
@@ -14,10 +15,10 @@ public:
                            const EventListenerHandle & right);
 
 private:
-    EventListenerHandle(EventBus & bus, const uint64_t id);
+    EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id);
     
 private:
-    EventBus & m_bus;
+    std::weak_ptr<EventBus> m_bus;
     const uint64_t m_id;
 
     bool m_destroyed;
