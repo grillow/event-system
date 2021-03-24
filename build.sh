@@ -7,4 +7,5 @@ mkdir -p $BUILD_PATH
 cd $BUILD_PATH
 time cmake ..
 time make
+time make test
 
