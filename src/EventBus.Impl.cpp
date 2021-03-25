@@ -10,7 +10,7 @@ void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
 }
 
 EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
-    EventListenerHandle handle(m_bus, m_nlisteners++);
+    EventListenerHandle handle(std::shared_ptr<EventBus>(m_bus), m_nlisteners++);
     m_listeners[listener->Type()].emplace_back(
 		    EventListenerHandleHidden(handle),
 		    std::move(listener));
@@ -36,8 +36,14 @@ void EventBus::Impl::Remove(EventListenerHandle && handle) {
  *  EventBus
  */
 
+std::shared_ptr<EventBus> EventBus::Create() {
+    std::shared_ptr<EventBus> bus(std::make_shared<EventBus>());
+    std::unique_ptr<EventBus::Impl> impl(std::make_unique<EventBus::Impl>(bus));
+    bus->m_pimpl = std::move(impl);
+    return bus;
+}
 
-EventBus::EventBus() : m_pimpl(std::make_unique<EventBus::Impl>(shared_from_this())) {}
+EventBus::EventBus() : m_pimpl(nullptr) {}
 
 EventBus::~EventBus() = default;
 

@@ -4,17 +4,15 @@
 
 
 EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
-    EventListenerHandle(other.m_bus, other.m_id) {
-    other.m_destroyed = true;
+    EventListenerHandle(std::shared_ptr<EventBus>(other.m_bus), other.m_id) {
+    other.m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
 EventListenerHandle::~EventListenerHandle() {
-    if (!m_destroyed) {
-	if (auto bus = m_bus.lock()) {
-	    bus->Remove(std::move(*this));
-	} else { // anti-idiot
-	    ///TODO: handle this error
-	}
+    if (auto bus = m_bus.lock()) {
+        bus->Remove(std::move(*this));
+    } else { // anti-idiot
+        ///TODO: handle this error
     }
 }
 
@@ -25,12 +23,14 @@ bool operator< (const EventListenerHandle & left,
 }
 
 
-EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id) :
+EventListenerHandle::EventListenerHandle(std::shared_ptr<EventBus> bus, const uint64_t id) :
         m_bus(bus),
-        m_id(id),
-        m_destroyed(false)
+        m_id(id)
     {}
 
+/*
+ *  Hidden
+ */
 
 EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle & handle) :
         m_id(handle.m_id)

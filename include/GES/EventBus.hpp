@@ -5,9 +5,10 @@
 
 #include <memory>
 
-struct EventBus final : public std::enable_shared_from_this<EventBus> {
+struct EventBus final {
 public:
-    EventBus();
+    static std::shared_ptr<EventBus> Create();
+
     ~EventBus();
 
     EventBus(const EventBus & other) = delete;
@@ -19,6 +20,11 @@ public:
 
 private:
     struct Impl;
+public:
+    EventBus();
+
+private:
+
     std::unique_ptr<EventBus::Impl> m_pimpl;
 };
 

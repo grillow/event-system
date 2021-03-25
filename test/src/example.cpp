@@ -35,9 +35,9 @@ private:
 
 struct ExampleStruct {
 public:
-    void Register(EventBus & bus) {
-        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerA")));
-        m_handles.emplace_back(bus.Add(std::make_unique<ExampleEventListener>("ListenerB")));
+    void Register(std::shared_ptr<EventBus> bus) {
+        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerA")));
+        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerB")));
     }
 
 private:
@@ -47,11 +47,11 @@ private:
 
 
 TEST(Example, example) {
-    EventBus bus;
+    std::shared_ptr<EventBus> bus = EventBus::Create();
     ExampleStruct sample;
     sample.Register(bus);
-    bus.Raise(std::make_unique<ExampleEvent>(1337));
-    bus.Raise(std::make_unique<ExampleEvent>(1488));
+    bus->Raise(std::make_unique<ExampleEvent>(1337));
+    bus->Raise(std::make_unique<ExampleEvent>(1488));
 
     EXPECT_EQ(global_number, 1337 + 1337 + 1488 + 1488);
 }

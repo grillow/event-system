@@ -4,7 +4,7 @@
 #include <list>
 
 
-std::shared_ptr<EventBus> bus(std::make_shared<EventBus>()); // global :3
+std::shared_ptr<EventBus> bus = EventBus::Create(); // global :3
 
 
 struct ExampleEvent : public IEvent {
