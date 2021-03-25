@@ -1,7 +1,7 @@
 #include "EventBus.Impl.hpp"
 
 
-EventBus::Impl::Impl(std::shared_ptr<EventBus> bus) : m_bus(bus), m_nlisteners(0) {}
+EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)), m_nlisteners(0) {}
 
 void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
     for (auto & listener : m_listeners[event->Type()]) {
@@ -37,13 +37,15 @@ void EventBus::Impl::Remove(EventListenerHandle && handle) {
  */
 
 std::shared_ptr<EventBus> EventBus::Create() {
-    std::shared_ptr<EventBus> bus(std::make_shared<EventBus>());
-    std::unique_ptr<EventBus::Impl> impl(std::make_unique<EventBus::Impl>(bus));
-    bus->m_pimpl = std::move(impl);
+    std::shared_ptr<EventBus> bus(
+            std::make_shared<EventBus>(
+                std::make_unique<EventBus::Impl>()));
+    bus->m_pimpl->m_bus = bus;
+
     return bus;
 }
 
-EventBus::EventBus() : m_pimpl(nullptr) {}
+EventBus::EventBus(std::unique_ptr<EventBus::Impl> impl) : m_pimpl(std::move(impl)) {}
 
 EventBus::~EventBus() = default;
 

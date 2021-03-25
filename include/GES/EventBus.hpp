@@ -6,6 +6,7 @@
 #include <memory>
 
 struct EventBus final {
+
 public:
     static std::shared_ptr<EventBus> Create();
 
@@ -21,7 +22,7 @@ public:
 private:
     struct Impl;
 public:
-    EventBus();
+    EventBus(std::unique_ptr<EventBus::Impl> impl);
 
 private:
 

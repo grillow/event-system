@@ -6,8 +6,9 @@
 #include <utility>
 
 struct EventBus::Impl {
+friend struct EventBus;
 public:
-    Impl(std::shared_ptr<EventBus> bus);
+    Impl();
     
     void Raise(std::unique_ptr<IEvent> event);
     
