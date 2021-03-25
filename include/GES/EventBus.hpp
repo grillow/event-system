@@ -8,8 +8,6 @@
 struct EventBus final {
 
 public:
-    EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
-    
     static std::shared_ptr<EventBus> Create();
 
     ~EventBus();
@@ -23,6 +21,8 @@ public:
 
 private:
     struct Impl;
+public:
+    EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
 
 private:
 
