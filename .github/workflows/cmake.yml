@@ -45,5 +45,5 @@ jobs:
     - name: Valgrind
       working-directory: ${{github.workspace}}
       shell: bash
-      run: valgrind ./bin/GES_test
+      run: valgrind ./bin/Test
 
