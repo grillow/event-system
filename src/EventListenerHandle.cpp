@@ -12,8 +12,6 @@ EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
 EventListenerHandle::~EventListenerHandle() {
     if (auto bus = m_bus.lock()) {
         bus->Remove(std::move(*this));
-    } else { // anti-idiot
-        ///TODO: handle this error
     }
 }
 

@@ -25,7 +25,7 @@ protected:
 
 
 template <typename T>
-struct IEventListener : public IEventListenerBaseTypes {
+struct IEventListener : public virtual IEventListenerBaseTypes {
 public:
     constexpr IEventListener() {
         static_assert(std::is_base_of<IEvent, T>::value,

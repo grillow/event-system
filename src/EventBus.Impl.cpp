@@ -3,38 +3,9 @@
 
 EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)), m_nlisteners(0) {}
 
-/*
-void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
-    for (auto & listener : m_listeners[event->Type()]) {
-        listener.second->Receive(*event);
-    }
-}
-
-EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
-    EventListenerHandle handle(std::shared_ptr<EventBus>(m_bus), m_nlisteners++);
-    m_listeners[listener->Type()].emplace_back(
-		    EventListenerHandleHidden(handle),
-		    std::move(listener));
-    return handle;
-}
-
-void EventBus::Impl::Remove(EventListenerHandle && handle) {
-    for (auto & listeners : m_listeners) {
-        auto it = listeners.second.begin();
-        while (it != listeners.second.end()) {
-            if ((*it).first.m_id == handle.m_id) {
-                it = listeners.second.erase(it);
-                --m_nlisteners;
-            } else {
-                ++it;
-            }
-        }
-    }
-}*/
 
 void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
-    const std::string type = event->Type();
-    for (auto & listener : m_listeners_type[type]) {
+    for (auto & listener : m_listeners_type[event->Type()]) {
         if (auto shared = listener.lock()) {
             shared->Receive(*event);
         } else {
@@ -43,18 +14,17 @@ void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
     }
 }
 
+
 EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
     const EventListenerHandleHidden handle(m_nlisteners++);
     m_listeners_handle[handle] = std::move(listener);
-    
-    std::shared_ptr<IEventListenerBase> ref = m_listeners_handle[handle];
-    
-    for (auto type : listener->Types()) {
+    auto ref = m_listeners_handle[handle];
+    for (auto type : ref->Types()) {
         m_listeners_type[type].emplace_back(ref);
     }
-
     return EventListenerHandle(std::shared_ptr<EventBus>(m_bus), handle.m_id);
 }
+
 
 void EventBus::Impl::Remove(EventListenerHandle && handle) {
     EventListenerHandleHidden hidden(handle);
@@ -93,17 +63,22 @@ std::shared_ptr<EventBus> EventBus::Create() {
     return bus;
 }
 
+
 EventBus::EventBus(std::unique_ptr<EventBus::Impl> impl) : m_pimpl(std::move(impl)) {}
 
+
 EventBus::~EventBus() = default;
+
 
 void EventBus::Raise(std::unique_ptr<IEvent> event) {
     m_pimpl->Raise(std::move(event));
 }
 
+
 EventListenerHandle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {
     return m_pimpl->Add(std::move(listener));
 }
+
 
 void EventBus::Remove(EventListenerHandle && handle) {
     m_pimpl->Remove(std::move(handle));

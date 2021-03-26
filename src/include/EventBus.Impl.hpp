@@ -21,17 +21,17 @@ private:
 
     std::weak_ptr<EventBus> m_bus;
 
-    struct false_cmp {
+    struct cmp {
         constexpr bool operator()(const auto & left,
                 const auto & right) const {
-            return false;
+            return left.m_id < right.m_id;
         }
     };
     
     std::map<
         EventListenerHandleHidden,
         std::shared_ptr<IEventListenerBase>,
-        false_cmp
+        cmp
     > m_listeners_handle;
     
     std::map<

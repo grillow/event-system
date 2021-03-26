@@ -21,7 +21,7 @@ struct ExampleEvent : public IEvent {
 const std::string ExampleEvent::Name = "ExampleEvent";
 
 
-struct ExampleEventListener : public IEventListener<ExampleEvent> {
+struct ExampleEventListener : public virtual IEventListener<ExampleEvent> {
     ExampleEventListener(std::string name) : m_name(std::move(name)) {}
 
     virtual void OnEvent(ExampleEvent & event) override {
@@ -37,6 +37,7 @@ public:
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
         m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerA")));
+        bus->Raise(std::make_unique<ExampleEvent>(808));
         m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerB")));
     }
 
