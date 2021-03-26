@@ -12,19 +12,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: update
-      run: sudo apt update && sudo apt upgrade -y
+      #- name: update
+      #  run: sudo apt update && sudo apt upgrade -y
 
     - name: Create Build Environment
       run: cmake -E make_directory ${{github.workspace}}/build
 
     - name: Install compiler
       run: |
-        sudo apt update
         sudo apt install gcc-10 g++-10
         sudo update-alternatives \
-          --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
-          --install /usr/bin/g++ g++ /usr/bin/g++-10 100 \
+        --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
+        --slave /usr/bin/g++ g++ /usr/bin/g++-10
 
     - name: Install gtest
       run: sudo apt install libgtest-dev
