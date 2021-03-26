@@ -2,7 +2,8 @@
 
 #include "example.hpp"
 
-TEST(Example, example) {
+
+TEST(Example, BirthStats) {
     std::shared_ptr<EventBus> bus = EventBus::Create();
     
     std::shared_ptr<PopulationStats> stats(
