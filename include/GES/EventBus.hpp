@@ -5,7 +5,7 @@
 
 #include <memory>
 
-struct EventBus final {
+class EventBus final {
 
 public:
     static std::shared_ptr<EventBus> Create();
@@ -21,6 +21,7 @@ public:
 
 private:
     struct Impl;
+
 public:
     EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
 
