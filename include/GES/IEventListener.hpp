@@ -24,12 +24,10 @@ protected:
 };
 
 
-template <typename T>
+template <EventDerived T>
 struct IEventListener : public virtual IEventListenerBaseTypes {
 public:
     constexpr IEventListener() {
-        static_assert(std::is_base_of<IEvent, T>::value,
-                "IEventListener<T>: T must inherit from IEvent");
         m_types.emplace_back(T::Name);
     }
 
