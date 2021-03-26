@@ -1,5 +1,6 @@
 #include <iostream>
 #include <GES/EventBus.hpp>
+#include <GES/Subscriber.hpp>
 
 #include <list>
 
@@ -21,7 +22,7 @@ struct ExampleEvent : public IEvent {
 const std::string ExampleEvent::Name = "ExampleEvent";
 
 
-struct ExampleEventListener : public virtual IEventListener<ExampleEvent> {
+struct ExampleEventListener : public IEventListener<ExampleEvent> {
     ExampleEventListener(std::string name) : m_name(std::move(name)) {}
 
     virtual void OnEvent(ExampleEvent & event) override {
@@ -32,21 +33,18 @@ private:
     const std::string m_name;
 };
 
-struct ExampleStruct {
+struct ExampleStruct : public Subscriber {
 public:
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
-        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerA")));
+        Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
         bus->Raise(std::make_unique<ExampleEvent>(808));
-        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerB")));
+       	Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
     }
 
     ~ExampleStruct() {
         std::cout << "~ExampleStruct()" << std::endl;
     }
-
-private:
-    std::list<EventListenerHandle> m_handles;
 
 };
 
@@ -59,6 +57,8 @@ int main() {
         bus->Raise(std::make_unique<ExampleEvent>(1337));
         bus->Raise(std::make_unique<ExampleEvent>(1488));
     }
+
+    bus->Raise(std::make_unique<ExampleEvent>(404));
     
 
     return 0;

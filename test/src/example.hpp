@@ -1,49 +1,81 @@
 #include <GES/EventBus.hpp>
+#include <GES/Subscriber.hpp>
 
-#include <list>
+#include <string>
+#include <iostream>
 
-
-uint64_t global_number = 0;
-
-
-struct ExampleEvent : public IEvent {
+struct BirthEvent : IEvent {
     static const std::string Name;
-    virtual std::string Type() const override {
-        return Name;
+    std::string Type() const {
+	return Name;
     }
-
-    ExampleEvent(const uint64_t number) : number(number) {}
-
-    const uint64_t number;
+    explicit BirthEvent(std::string name) : m_name(std::move(name)) {}
+    std::string m_name;
 };
-const std::string ExampleEvent::Name = "ExampleEvent";
+const std::string BirthEvent::Name = "BirthEvent";
+
+struct DeathEvent : IEvent {
+    static const std::string Name;
+    std::string Type() const {
+	return Name;
+    }
+    explicit DeathEvent(std::string name) : m_name(std::move(name)) {}
+    std::string m_name;
+};
+const std::string DeathEvent::Name = "DeathEvent";
 
 
-struct ExampleEventListener : public IEventListener<ExampleEvent> {
-    virtual std::string Type() const {
-        return "ExampleEvent";
+struct PopulationStats {
+    PopulationStats() : m_population(0) {}
+
+    size_t GetPopulation() const {
+	return m_population;
     }
 
-    ExampleEventListener(std::string name) : m_name(std::move(name)) {}
-
-    virtual void OnEvent(ExampleEvent & event) override {
-        global_number += event.number;
+    size_t IncreasePopulation() {
+	return ++m_population;
+    }
+    
+    size_t DecreasePopulation() {
+	return --m_population;
     }
 
 private:
-    const std::string m_name;
+    size_t m_population;
+
 };
 
 
-struct ExampleStruct {
-public:
-    void Register(std::shared_ptr<EventBus> bus) {
-        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerA")));
-        m_handles.emplace_back(bus->Add(std::make_unique<ExampleEventListener>("ListenerB")));
+struct PopulationListener :
+	IEventListener<BirthEvent>/*,
+	IEventListener<DeathEvent>*/ {
+    
+    PopulationListener(std::weak_ptr<PopulationStats> stats) :
+	    m_stats(stats) {}
+
+    void OnEvent(BirthEvent & event) {
+	//std::cout << event.m_name << " has been born!" << std::endl;
+	if (auto stats = m_stats.lock()) {
+	    stats->IncreasePopulation();
+	}
     }
 
-private:
-    std::list<EventListenerHandle> m_handles;
+    /*void OnEvent(DeathEvent & event) {
+        //std::cout << event.m_name << " has died!" << std::endl;
+	if (auto stats = m_stats.lock()) {
+	    stats->DecreasePopulation();
+	}
+    }*/
 
+private:
+    std::weak_ptr<PopulationStats> m_stats;
+};
+
+
+struct PopulationListenerHandler : Subscriber{
+    PopulationListenerHandler(std::shared_ptr<EventBus> bus,
+		    std::weak_ptr<PopulationStats> stats) {
+	Subscribe(bus, std::make_unique<PopulationListener>(stats));
+    }
 };
 
