@@ -2,11 +2,11 @@
 #include <GES/Subscriber.hpp>
 
 #include <string>
-#include <iostream>
+//#include <iostream>
 
 struct BirthEvent : IEvent {
     static const std::string Name;
-    std::string Type() const {
+    std::string Type() const override {
 	return Name;
     }
     explicit BirthEvent(std::string name) : m_name(std::move(name)) {}
@@ -16,7 +16,7 @@ const std::string BirthEvent::Name = "BirthEvent";
 
 struct DeathEvent : IEvent {
     static const std::string Name;
-    std::string Type() const {
+    std::string Type() const override {
 	return Name;
     }
     explicit DeathEvent(std::string name) : m_name(std::move(name)) {}
