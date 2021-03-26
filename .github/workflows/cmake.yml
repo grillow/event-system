@@ -17,6 +17,9 @@ jobs:
 
     - name: Install gtest
       run: sudo apt install libgtest-dev
+    
+    - name: Install valgrind
+      run: sudo apt install valgrind
 
     - name: Configure CMake
       shell: bash
@@ -32,3 +35,9 @@ jobs:
       working-directory: ${{github.workspace}}/build
       shell: bash
       run: ctest -C $BUILD_TYPE
+
+    - name: Valgrind
+      working-directory: ${{github.workspace}}
+      shell: bash
+      run: valgrind ./bin/GES_test
+
