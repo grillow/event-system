@@ -6,8 +6,10 @@
 #include <memory>
 
 struct EventBus final {
+
 public:
-    EventBus();
+    static std::shared_ptr<EventBus> Create();
+
     ~EventBus();
 
     EventBus(const EventBus & other) = delete;
@@ -19,6 +21,11 @@ public:
 
 private:
     struct Impl;
+public:
+    EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
+
+private:
+
     std::unique_ptr<EventBus::Impl> m_pimpl;
 };
 

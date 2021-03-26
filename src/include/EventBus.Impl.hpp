@@ -6,8 +6,9 @@
 #include <utility>
 
 struct EventBus::Impl {
+friend struct EventBus;
 public:
-    Impl(EventBus & bus);
+    Impl();
     
     void Raise(std::unique_ptr<IEvent> event);
     
@@ -18,17 +19,19 @@ public:
 private:
     struct EventListenerHandleHidden;
 
-    EventBus & m_bus;
-
+    std::weak_ptr<EventBus> m_bus;
+    
+    std::map<
+        EventListenerHandleHidden,
+        std::shared_ptr<IEventListenerBase>
+    > m_listeners_handle;
+    
     std::map<
         std::string,
         std::list<
-            std::pair<
-                EventListenerHandleHidden,
-                std::unique_ptr<IEventListenerBase>
-            >
+            std::weak_ptr<IEventListenerBase> 
         >
-    > m_listeners;
+    > m_listeners_type;
 
     uint64_t m_nlisteners;
 
@@ -36,7 +39,18 @@ private:
 
 
 struct EventBus::Impl::EventListenerHandleHidden final {
+    EventListenerHandleHidden(const uint64_t id);
     EventListenerHandleHidden(const EventListenerHandle & handle);
     const uint64_t m_id;
+
+    friend constexpr bool operator< (const EventListenerHandleHidden & left,
+            const EventListenerHandleHidden & right) {
+        return left.m_id < right.m_id;
+    }
+
+    friend constexpr bool operator==(const EventListenerHandleHidden & left,
+            const EventListenerHandleHidden & right) {
+        return left.m_id == right.m_id;
+    }
 };
 
