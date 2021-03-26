@@ -20,18 +20,10 @@ private:
     struct EventListenerHandleHidden;
 
     std::weak_ptr<EventBus> m_bus;
-
-    struct cmp {
-        constexpr bool operator()(const auto & left,
-                const auto & right) const {
-            return left.m_id < right.m_id;
-        }
-    };
     
     std::map<
         EventListenerHandleHidden,
-        std::shared_ptr<IEventListenerBase>,
-        cmp
+        std::shared_ptr<IEventListenerBase>
     > m_listeners_handle;
     
     std::map<
@@ -50,6 +42,11 @@ struct EventBus::Impl::EventListenerHandleHidden final {
     EventListenerHandleHidden(const uint64_t id);
     EventListenerHandleHidden(const EventListenerHandle & handle);
     const uint64_t m_id;
+
+    friend constexpr bool operator< (const EventListenerHandleHidden & left,
+            const EventListenerHandleHidden & right) {
+        return left.m_id < right.m_id;
+    }
 
     friend constexpr bool operator==(const EventListenerHandleHidden & left,
             const EventListenerHandleHidden & right) {
