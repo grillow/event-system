@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: update
+      run: sudo apt update && sudo apt upgrade -y
+
     - name: Create Build Environment
       run: cmake -E make_directory ${{github.workspace}}/build
 
