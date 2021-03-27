@@ -52,5 +52,5 @@ jobs:
     - name: Valgrind
       working-directory: ${{github.workspace}}
       shell: bash
-      run: valgrind --error-exitcode=1 --leak-check=full ./bin/Test
+      run: valgrind --error-exitcode=1 --leak-check=full -s ./bin/Test
 

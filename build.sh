@@ -12,5 +12,5 @@ cd $BUILD_PATH
 time cmake .. || exit 1
 time make || exit 1
 time make test || exit 1
-time valgrind --error-exitcode=1 --leak-check=full $BIN_PATH/Test
+time valgrind --error-exitcode=1 --leak-check=full -s $BIN_PATH/Test
 

@@ -39,10 +39,13 @@ private:
 
 
 struct EventBus::Impl::EventListenerHandleHidden final {
-    EventListenerHandleHidden(const uint64_t id);
-    EventListenerHandleHidden(const EventListenerHandle & handle);
+    explicit EventListenerHandleHidden(const uint64_t id);
+    explicit EventListenerHandleHidden(const EventListenerHandle & handle);
+
+public:
     const uint64_t m_id;
 
+public:
     friend constexpr bool operator< (const EventListenerHandleHidden & left,
             const EventListenerHandleHidden & right) {
         return left.m_id < right.m_id;
