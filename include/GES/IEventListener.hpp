@@ -12,7 +12,7 @@ struct IEventListenerBase {
     virtual std::vector<std::string> Types() const = 0;
 };
 
-// helper
+// helper, do not use it
 struct IEventListenerTypes : public IEventListenerBase {
 public:
     std::vector<std::string> Types() const override final {
