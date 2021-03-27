@@ -15,7 +15,7 @@ public:
                            const EventListenerHandle & right);
 
 private:
-    EventListenerHandle(std::shared_ptr<EventBus> bus, const uint64_t id);
+    EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id);
     
 private:
     std::weak_ptr<EventBus> m_bus;

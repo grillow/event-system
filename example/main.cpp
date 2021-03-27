@@ -8,18 +8,13 @@
 std::shared_ptr<EventBus> bus = EventBus::Create(); // global :3
 
 
-struct ExampleEvent : public IEvent {
-    static const std::string Name;
-    
-    virtual std::string Type() const override {
-        return Name;
-    }
-
+struct ExampleEvent : IEventTemplate<ExampleEvent> {
     ExampleEvent(const uint64_t number) : number(number) {}
 
     const uint64_t number;
 };
-const std::string ExampleEvent::Name = "ExampleEvent";
+template<>
+const std::string IEventTemplate<ExampleEvent>::Name = "ExampleEvent";
 
 
 struct ExampleEventListener : public IEventListener<ExampleEvent> {
@@ -32,6 +27,7 @@ struct ExampleEventListener : public IEventListener<ExampleEvent> {
 private:
     const std::string m_name;
 };
+
 
 struct ExampleStruct : public Subscriber {
 public:

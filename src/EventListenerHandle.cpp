@@ -4,7 +4,7 @@
 
 
 EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
-    EventListenerHandle(std::shared_ptr<EventBus>(other.m_bus), other.m_id) {
+    EventListenerHandle(std::weak_ptr<EventBus>(other.m_bus), other.m_id) {
     other.m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
@@ -22,7 +22,7 @@ bool operator< (const EventListenerHandle & left,
 }
 
 
-EventListenerHandle::EventListenerHandle(std::shared_ptr<EventBus> bus, const uint64_t id) :
+EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id) :
         m_bus(bus),
         m_id(id)
     {}
