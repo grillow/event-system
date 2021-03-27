@@ -2,12 +2,7 @@
 
 #include "example.hpp"
 
-#include <iostream>
 TEST(Example, BirthStats) {
-    int *arr = new int[10];
-    arr[0] = 1337;
-    std::cout << arr[0];
-    
     std::shared_ptr<EventBus> bus = EventBus::Create();
     
     std::shared_ptr<PopulationStats> stats(
