@@ -12,8 +12,8 @@ struct IEventListenerBase {
     virtual std::vector<std::string> Types() const = 0;
 };
 
-
-struct IEventListenerBaseTypes : public IEventListenerBase {
+// helper
+struct IEventListenerTypes : public IEventListenerBase {
 public:
     std::vector<std::string> Types() const override final {
         return m_types;
@@ -25,7 +25,7 @@ protected:
 
 
 template <EventDerived T>
-struct IEventListener : public virtual IEventListenerBaseTypes {
+struct IEventListener : public virtual IEventListenerTypes {
 public:
     constexpr IEventListener() {
         m_types.emplace_back(T::Name);

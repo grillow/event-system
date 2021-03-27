@@ -67,7 +67,7 @@ private:
 };
 
 
-struct PopulationListenerHandler : Subscriber{
+struct PopulationListenerHandler : Subscriber {
     PopulationListenerHandler(std::shared_ptr<EventBus> bus,
             std::weak_ptr<PopulationStats> stats) {
         Subscribe(bus, std::make_unique<PopulationListener>(stats));
