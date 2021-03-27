@@ -1,5 +1,5 @@
 #include <GES/EventBus.hpp>
-#include <GES/Subscriber.hpp>
+#include <GES/Handler.hpp>
 
 #include <string>
 //#include <iostream>
@@ -67,7 +67,7 @@ private:
 };
 
 
-struct PopulationListenerHandler : Subscriber {
+struct PopulationListenerHandler : Handler {
     PopulationListenerHandler(std::shared_ptr<EventBus> bus,
             std::weak_ptr<PopulationStats> stats) {
         Subscribe(bus, std::make_unique<PopulationListener>(stats));

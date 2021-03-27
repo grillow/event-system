@@ -2,6 +2,7 @@
 
 #include <GES/EventBus.hpp>
 
+
 struct AddEvent : IEvent {
     static const std::string Name;
     std::string Type() const override {
