@@ -10,3 +10,12 @@ public:
 template <typename T>
 concept EventDerived = std::is_base_of<IEvent, T>::value;
 
+
+template <typename T>
+struct IEventTemplate : IEvent {
+    static const std::string Name;
+    std::string Type() const override {
+        return Name;
+    }
+};
+

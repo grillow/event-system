@@ -4,40 +4,35 @@
 #include <string>
 //#include <iostream>
 
-struct BirthEvent : IEvent {
-    static const std::string Name;
-    std::string Type() const override {
-	return Name;
-    }
+struct BirthEvent : IEventTemplate<BirthEvent> {
     explicit BirthEvent(std::string name) : m_name(std::move(name)) {}
     std::string m_name;
 };
-const std::string BirthEvent::Name = "BirthEvent";
+template<>
+const std::string IEventTemplate<BirthEvent>::Name = "BirthEvent";
 
-struct DeathEvent : IEvent {
-    static const std::string Name;
-    std::string Type() const override {
-	return Name;
-    }
+
+struct DeathEvent : IEventTemplate<DeathEvent> {
     explicit DeathEvent(std::string name) : m_name(std::move(name)) {}
     std::string m_name;
 };
-const std::string DeathEvent::Name = "DeathEvent";
+template<>
+const std::string IEventTemplate<DeathEvent>::Name = "DeathEvent";
 
 
 struct PopulationStats {
     PopulationStats() : m_population(0) {}
 
     size_t GetPopulation() const {
-	return m_population;
+        return m_population;
     }
 
     size_t IncreasePopulation() {
-	return ++m_population;
+        return ++m_population;
     }
-    
+
     size_t DecreasePopulation() {
-	return --m_population;
+        return --m_population;
     }
 
 private:
@@ -47,24 +42,24 @@ private:
 
 
 struct PopulationListener :
-	IEventListener<BirthEvent>/*,
-	IEventListener<DeathEvent>*/ {
-    
+    IEventListener<BirthEvent>/*,
+    IEventListener<DeathEvent>*/ {
+
     PopulationListener(std::weak_ptr<PopulationStats> stats) :
-	    m_stats(stats) {}
+        m_stats(stats) {}
 
     void OnEvent(BirthEvent & event) {
-	//std::cout << event.m_name << " has been born!" << std::endl;
-	if (auto stats = m_stats.lock()) {
-	    stats->IncreasePopulation();
-	}
+        //std::cout << event.m_name << " has been born!" << std::endl;
+        if (auto stats = m_stats.lock()) {
+            stats->IncreasePopulation();
+        }
     }
 
     /*void OnEvent(DeathEvent & event) {
-        //std::cout << event.m_name << " has died!" << std::endl;
-	if (auto stats = m_stats.lock()) {
-	    stats->DecreasePopulation();
-	}
+    //std::cout << event.m_name << " has died!" << std::endl;
+    if (auto stats = m_stats.lock()) {
+    stats->DecreasePopulation();
+    }
     }*/
 
 private:
@@ -74,8 +69,8 @@ private:
 
 struct PopulationListenerHandler : Subscriber{
     PopulationListenerHandler(std::shared_ptr<EventBus> bus,
-		    std::weak_ptr<PopulationStats> stats) {
-	Subscribe(bus, std::make_unique<PopulationListener>(stats));
+            std::weak_ptr<PopulationStats> stats) {
+        Subscribe(bus, std::make_unique<PopulationListener>(stats));
     }
 };
 

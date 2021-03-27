@@ -40,7 +40,7 @@ public:
 };
 
 
-template <typename T>
+template <EventDerived T>
 struct IEventListenerLambda : public IEventListener<T> {
 public:
     constexpr IEventListenerLambda(std::function<void(T &)> callback) : m_callback(callback) {}
