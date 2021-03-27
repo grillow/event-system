@@ -26,7 +26,7 @@ public:
     EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
 
 private:
-
     std::unique_ptr<EventBus::Impl> m_pimpl;
+
 };
 
