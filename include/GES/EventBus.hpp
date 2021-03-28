@@ -21,7 +21,7 @@ public:
     void Raise(std::unique_ptr<IEvent> event);
 
     template <EventListenerBaseDerived T, typename ...Args>
-    constexpr /*[[nodiscard]]*/ EventListenerHandle Add(Args&&... args) {
+    [[nodiscard]] constexpr EventListenerHandle Add(Args&&... args) {
         return Add(std::make_unique<T>(std::forward<Args>(args)...));
     }
     [[nodiscard]] EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
