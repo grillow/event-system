@@ -15,6 +15,9 @@ struct IEventListenerBase {
 
 // helper, do not use it
 struct IEventListenerResource : IEventListenerBase {
+    template <EventDerived T = IEvent>
+    using callback_t = std::function<void(T &)>;
+    
     std::vector<IEvent::Type_t> Types() const override final {
         return m_types;
     }
@@ -25,7 +28,7 @@ struct IEventListenerResource : IEventListenerBase {
 
 protected:
     std::vector<IEvent::Type_t> m_types;
-    std::map<IEvent::Type_t, std::function<void(IEvent &)>> m_callbacks;
+    std::map<IEvent::Type_t, callback_t<>> m_callbacks;
 };
 
 
@@ -42,13 +45,14 @@ struct IEventListener : virtual IEventListenerResource {
 
 template <EventDerived T>
 struct IEventListenerLambda : IEventListener<T> {
-    constexpr IEventListenerLambda(std::function<void(T &)> callback) : m_callback(callback) {}
+    constexpr IEventListenerLambda(IEventListenerResource::callback_t<T> callback) :
+        m_callback(callback) {}
 
     void OnEvent(T & event) override final {
         m_callback(event);
     }
 
 private:
-    const std::function<void(T &)> m_callback;
+    const IEventListenerResource::callback_t<T> m_callback;
 };
 
