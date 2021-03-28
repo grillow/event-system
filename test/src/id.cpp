@@ -7,7 +7,7 @@
 
 
 struct EmptyEvent : IEventTemplate<EmptyEvent> {};
-template<> const std::string IEventTemplate<EmptyEvent>::Name = "EmptyEvent";
+template<> const IEvent::Type_t IEventTemplate<EmptyEvent>::ID = 1;
 
 
 TEST(id, uniqueness) {

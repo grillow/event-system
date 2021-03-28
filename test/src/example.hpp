@@ -67,3 +67,25 @@ struct PopulationListenerHandler : Handler {
     }
 };
 
+struct PopulationListenerLambda :
+    IEventListenerLambda<BirthEvent>,
+    IEventListenerLambda<DeathEvent> {
+    
+    PopulationListenerLambda(
+                IEventListenerResource::callback_t<BirthEvent> callback_birth,
+                IEventListenerResource::callback_t<DeathEvent> callback_death) :
+            IEventListenerLambda<BirthEvent>(callback_birth),
+            IEventListenerLambda<DeathEvent>(callback_death)
+        {}
+};
+
+struct PopulationListenerLambdaHandler : Handler {
+    PopulationListenerLambdaHandler(std::shared_ptr<EventBus> bus,
+            IEventListenerResource::callback_t<BirthEvent> callback_birth,
+            IEventListenerResource::callback_t<DeathEvent> callback_death) {
+        Subscribe(bus, std::make_unique<PopulationListenerLambda>(
+            callback_birth, callback_death
+        ));
+    }
+};
+

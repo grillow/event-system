@@ -29,7 +29,7 @@ private:
     > m_listeners_handle;
     
     std::map<
-        std::string,
+        IEvent::Type_t,
         std::list<
             std::weak_ptr<IEventListenerBase> 
         >
