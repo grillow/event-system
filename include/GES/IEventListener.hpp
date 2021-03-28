@@ -13,6 +13,10 @@ struct IEventListenerBase {
     virtual std::vector<IEvent::Type_t> Types() const = 0;
 };
 
+template <typename T>
+concept EventListenerBaseDerived = std::is_base_of<IEvent, T>::value;
+
+
 // helper, do not use it
 struct IEventListenerResource : IEventListenerBase {
     template <EventDerived T = IEvent>
