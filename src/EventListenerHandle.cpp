@@ -4,17 +4,24 @@
 
 
 EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
-    EventListenerHandle(std::weak_ptr<EventBus>(other.m_bus), other.m_id) {
+    EventListenerHandle(other.m_bus, other.m_id) {
     other.m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
-
-EventListenerHandle::~EventListenerHandle() {
+void EventListenerHandle::Release() {
     if (auto bus = m_bus.lock()) {
         bus->Remove(std::move(*this));
     }
+    m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
+bool EventListenerHandle::Active() const {
+    return !m_bus.expired();
+}
+
+EventListenerHandle::~EventListenerHandle() {
+    Release();
+}
 
 bool operator< (const EventListenerHandle & left,
                 const EventListenerHandle & right) {
