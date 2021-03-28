@@ -21,7 +21,7 @@ struct LoopIterationEvent : IEventTemplate<LoopIterationEvent> {
     ~LoopIterationEvent() {
         if (condition(*this)) {
             iteration(*this);
-            bus->Raise(std::make_unique<LoopIterationEvent>(bus, condition, iteration));
+            bus->Raise<LoopIterationEvent>(bus, condition, iteration);
         }
     }
 
@@ -53,7 +53,7 @@ TEST(Loop, simple) {
         }
     ));
 
-    bus->Raise(std::make_unique<LoopIterationEvent>(
+    bus->Raise<LoopIterationEvent>(
         bus,
         [&i](LoopIterationEvent & event) {
             return i < last_i;
@@ -63,7 +63,7 @@ TEST(Loop, simple) {
             sum += i;
             ++i;
         }
-    ));
+    );
 
     // equivalent
     size_t sum_check = 0;

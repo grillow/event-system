@@ -4,7 +4,7 @@
 EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)) {}
 
 
-void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
+void EventBus::Impl::Dispatch(std::unique_ptr<IEvent> event) {
     for (auto & listener : m_listeners_type[event->Type()]) {
         auto shared = listener.lock();
         shared->Receive(*event);
@@ -71,8 +71,8 @@ EventBus::EventBus(std::unique_ptr<EventBus::Impl> impl) : m_pimpl(std::move(imp
 EventBus::~EventBus() = default;
 
 
-void EventBus::Raise(std::unique_ptr<IEvent> event) {
-    m_pimpl->Raise(std::move(event));
+void EventBus::Dispatch(std::unique_ptr<IEvent> event) {
+    m_pimpl->Dispatch(std::move(event));
 }
 
 

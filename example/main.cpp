@@ -34,7 +34,7 @@ public:
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
         Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
-        bus->Raise(std::make_unique<ExampleEvent>(808));
+        bus->Raise<ExampleEvent>(808);
        	Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
     }
 
@@ -50,11 +50,11 @@ int main() {
     {
         ExampleStruct sample;
 
-        bus->Raise(std::make_unique<ExampleEvent>(1337));
-        bus->Raise(std::make_unique<ExampleEvent>(1488));
+        bus->Raise<ExampleEvent>(1337);
+        bus->Raise<ExampleEvent>(1488);
     }
 
-    bus->Raise(std::make_unique<ExampleEvent>(404));
+    bus->Raise<ExampleEvent>(404);
     
 
     return 0;

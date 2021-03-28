@@ -14,7 +14,12 @@ public:
 
     EventBus(const EventBus & other) = delete;
 
-    void Raise(std::unique_ptr<IEvent> event);
+    template <EventDerived T, typename ...Args>
+    constexpr void Raise(Args&&... args) {
+        Dispatch(std::make_unique<T>(std::forward<Args>(args)...));
+    }
+
+    void Dispatch(std::unique_ptr<IEvent> event);
 
     [[nodiscard]] EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
     void Remove(EventListenerHandle && handle);

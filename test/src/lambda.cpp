@@ -22,16 +22,16 @@ TEST(Lambda, simple) {
     ));
 
     EXPECT_EQ(number, 0);
-    bus->Raise(std::make_unique<AddEvent>(1337));
+    bus->Raise<AddEvent>(1337);
     EXPECT_EQ(number, 1337);
 
-    bus->Raise(std::make_unique<AddEvent>(-1337));
+    bus->Raise<AddEvent>(-1337);
     EXPECT_EQ(number, 0);
 
-    bus->Raise(std::make_unique<AddEvent>(200));
+    bus->Raise<AddEvent>(200);
     EXPECT_EQ(number, 200);
     
-    bus->Raise(std::make_unique<AddEvent>(800));
+    bus->Raise<AddEvent>(800);
     EXPECT_EQ(number, 1000);
 }
 

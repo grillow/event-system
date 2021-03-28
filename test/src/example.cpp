@@ -25,32 +25,32 @@ TEST(Example, ordinary) {
 
         EXPECT_EQ(stats->GetPopulation(), 0);
 
-        bus->Raise(std::make_unique<BirthEvent>("First"));
+        bus->Raise<BirthEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<BirthEvent>("Second"));
+        bus->Raise<BirthEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise(std::make_unique<DeathEvent>("Second"));
+        bus->Raise<DeathEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<BirthEvent>("Third"));
+        bus->Raise<BirthEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise(std::make_unique<DeathEvent>("First"));
+        bus->Raise<DeathEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<DeathEvent>("Third"));
+        bus->Raise<DeathEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 0);
     }
 
-    bus->Raise(std::make_unique<BirthEvent>("Fourth"));
+    bus->Raise<BirthEvent>("Fourth");
     EXPECT_EQ(stats->GetPopulation(), 0);
 
 }
@@ -73,32 +73,32 @@ TEST(Example, lambda) {
 
         EXPECT_EQ(stats->GetPopulation(), 0);
 
-        bus->Raise(std::make_unique<BirthEvent>("First"));
+        bus->Raise<BirthEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<BirthEvent>("Second"));
+        bus->Raise<BirthEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise(std::make_unique<DeathEvent>("Second"));
+        bus->Raise<DeathEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<BirthEvent>("Third"));
+        bus->Raise<BirthEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise(std::make_unique<DeathEvent>("First"));
+        bus->Raise<DeathEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise(std::make_unique<DeathEvent>("Third"));
+        bus->Raise<DeathEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 0);
     }
 
-    bus->Raise(std::make_unique<BirthEvent>("Fourth"));
+    bus->Raise<BirthEvent>("Fourth");
     EXPECT_EQ(stats->GetPopulation(), 0);
 
 }
