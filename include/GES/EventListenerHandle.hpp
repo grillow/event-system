@@ -11,6 +11,10 @@ public:
     EventListenerHandle(EventListenerHandle && other);
     ~EventListenerHandle();
 
+    void Release();
+    bool Active() const;
+
+public:
     friend bool operator< (const EventListenerHandle & left,
                            const EventListenerHandle & right);
 

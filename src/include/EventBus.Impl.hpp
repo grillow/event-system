@@ -1,9 +1,11 @@
 #pragma once
 #include "EventBus.hpp"
+#include "UniqueGenerator.hpp"
 
 #include <map>
 #include <list>
 #include <utility>
+
 
 struct EventBus::Impl {
 friend struct EventBus;
@@ -33,7 +35,8 @@ private:
         >
     > m_listeners_type;
 
-    uint64_t m_nlisteners;
+private:
+    UniqueGenerator m_generator;
 
 };
 

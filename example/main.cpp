@@ -1,6 +1,6 @@
 #include <iostream>
 #include <GES/EventBus.hpp>
-#include <GES/Subscriber.hpp>
+#include <GES/Handler.hpp>
 
 #include <list>
 
@@ -29,7 +29,7 @@ private:
 };
 
 
-struct ExampleStruct : public Subscriber {
+struct ExampleStruct : public Handler {
 public:
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;

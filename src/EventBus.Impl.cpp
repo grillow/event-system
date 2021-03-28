@@ -1,22 +1,21 @@
 #include "EventBus.Impl.hpp"
 
 
-EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)), m_nlisteners(0) {}
+EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)) {}
 
 
 void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
     for (auto & listener : m_listeners_type[event->Type()]) {
-        if (auto shared = listener.lock()) {
-            shared->Receive(*event);
-        } else {
-            ///TODO: handle this nonsense
-        }
+        auto shared = listener.lock();
+        shared->Receive(*event);
     }
 }
 
 
 EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
-    const EventListenerHandleHidden handle(m_nlisteners++);
+    const uint64_t unique_id = m_generator.Get();
+    
+    const EventListenerHandleHidden handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
     auto ref = m_listeners_handle[handle];
     for (auto type : ref->Types()) {
@@ -27,6 +26,9 @@ EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> list
 
 
 void EventBus::Impl::Remove(EventListenerHandle && handle) {
+    const uint64_t unique_id = handle.m_id;
+    m_generator.Release(unique_id);
+
     EventListenerHandleHidden hidden(handle);
 
     std::shared_ptr<IEventListenerBase> ref =
@@ -37,7 +39,6 @@ void EventBus::Impl::Remove(EventListenerHandle && handle) {
         while (it != listeners.second.end()) {
             if (std::shared_ptr<IEventListenerBase>(*it) == ref) {
                 it = listeners.second.erase(it);
-                --m_nlisteners;
             } else {
                 ++it;
             }
