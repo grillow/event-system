@@ -62,7 +62,7 @@ TEST(Example, lambda) {
     auto stats = std::make_shared<PopulationStats>();
    
     { 
-        PopulationListenerHandlerLambda handler(bus,
+        PopulationListenerLambdaHandler handler(bus,
                 [&](BirthEvent & event) {
                     stats->IncreasePopulation();
                 },

@@ -79,8 +79,8 @@ struct PopulationListenerLambda :
         {}
 };
 
-struct PopulationListenerHandlerLambda : Handler {
-    PopulationListenerHandlerLambda(std::shared_ptr<EventBus> bus,
+struct PopulationListenerLambdaHandler : Handler {
+    PopulationListenerLambdaHandler(std::shared_ptr<EventBus> bus,
             IEventListenerResource::callback_t<BirthEvent> callback_birth,
             IEventListenerResource::callback_t<DeathEvent> callback_death) {
         Subscribe(bus, std::make_unique<PopulationListenerLambda>(
