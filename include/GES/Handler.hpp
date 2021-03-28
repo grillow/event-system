@@ -1,3 +1,4 @@
+#pragma once
 #include "EventListenerHandle.hpp"
 #include "EventBus.hpp"
 

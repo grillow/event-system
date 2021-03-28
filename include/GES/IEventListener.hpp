@@ -2,8 +2,9 @@
 #include "IEvent.hpp"
 
 #include <type_traits>
-#include <vector>
 #include <functional>
+#include <vector>
+#include <map>
 
 
 struct IEventListenerBase {
@@ -17,9 +18,14 @@ struct IEventListenerTypes : IEventListenerBase {
     std::vector<std::string> Types() const override final {
         return m_types;
     }
+    
+    void Receive(IEvent & event) override final {
+        m_callbacks[event.Type()](event);
+    }
 
 protected:
     std::vector<std::string> m_types;
+    std::map<std::string, std::function<void(IEvent &)>> m_callbacks;
 };
 
 
@@ -27,14 +33,10 @@ template <EventDerived T>
 struct IEventListener : virtual IEventListenerTypes {
     constexpr IEventListener() {
         m_types.emplace_back(T::Name);
-    }
-
-    void Receive(IEvent & event) override final {
-        OnEvent(dynamic_cast<T &>(event));
+        m_callbacks[T::Name] = [this](IEvent & event){ OnEvent(dynamic_cast<T &>(event)); };
     }
 
     virtual void OnEvent(T & event) = 0;
-
 };
 
 

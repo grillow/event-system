@@ -1,23 +1,18 @@
+#pragma once
 #include <GES/EventBus.hpp>
 #include <GES/Handler.hpp>
 
 #include <string>
-//#include <iostream>
+
 
 struct BirthEvent : IEventTemplate<BirthEvent> {
     explicit BirthEvent(std::string name) : m_name(std::move(name)) {}
     std::string m_name;
 };
-template<>
-const std::string IEventTemplate<BirthEvent>::Name = "BirthEvent";
-
-
 struct DeathEvent : IEventTemplate<DeathEvent> {
     explicit DeathEvent(std::string name) : m_name(std::move(name)) {}
     std::string m_name;
 };
-template<>
-const std::string IEventTemplate<DeathEvent>::Name = "DeathEvent";
 
 
 struct PopulationStats {
@@ -42,25 +37,23 @@ private:
 
 
 struct PopulationListener :
-    IEventListener<BirthEvent>/*,
-    IEventListener<DeathEvent>*/ {
+    IEventListener<BirthEvent>,
+    IEventListener<DeathEvent> {
 
     PopulationListener(std::weak_ptr<PopulationStats> stats) :
         m_stats(stats) {}
 
     void OnEvent(BirthEvent & event) {
-        //std::cout << event.m_name << " has been born!" << std::endl;
         if (auto stats = m_stats.lock()) {
             stats->IncreasePopulation();
         }
     }
 
-    /*void OnEvent(DeathEvent & event) {
-    //std::cout << event.m_name << " has died!" << std::endl;
-    if (auto stats = m_stats.lock()) {
-    stats->DecreasePopulation();
+    void OnEvent(DeathEvent & event) {
+        if (auto stats = m_stats.lock()) {
+            stats->DecreasePopulation();
+        }
     }
-    }*/
 
 private:
     std::weak_ptr<PopulationStats> m_stats;
