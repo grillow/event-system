@@ -14,7 +14,7 @@ struct ExampleEvent : IEventTemplate<ExampleEvent> {
     const uint64_t number;
 };
 template<>
-const std::string IEventTemplate<ExampleEvent>::Name = "ExampleEvent";
+const IEvent::Type_t IEventTemplate<ExampleEvent>::ID = 1;
 
 
 struct ExampleEventListener : public IEventListener<ExampleEvent> {

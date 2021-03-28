@@ -10,12 +10,12 @@
 struct IEventListenerBase {
     virtual ~IEventListenerBase() = default;
     virtual void Receive(IEvent & event) = 0;
-    virtual std::vector<std::string> Types() const = 0;
+    virtual std::vector<IEvent::Type_t> Types() const = 0;
 };
 
 // helper, do not use it
-struct IEventListenerTypes : IEventListenerBase {
-    std::vector<std::string> Types() const override final {
+struct IEventListenerResource : IEventListenerBase {
+    std::vector<IEvent::Type_t> Types() const override final {
         return m_types;
     }
     
@@ -24,16 +24,16 @@ struct IEventListenerTypes : IEventListenerBase {
     }
 
 protected:
-    std::vector<std::string> m_types;
-    std::map<std::string, std::function<void(IEvent &)>> m_callbacks;
+    std::vector<IEvent::Type_t> m_types;
+    std::map<IEvent::Type_t, std::function<void(IEvent &)>> m_callbacks;
 };
 
 
 template <EventDerived T>
-struct IEventListener : virtual IEventListenerTypes {
+struct IEventListener : virtual IEventListenerResource {
     constexpr IEventListener() {
-        m_types.emplace_back(T::Name);
-        m_callbacks[T::Name] = [this](IEvent & event){ OnEvent(dynamic_cast<T &>(event)); };
+        m_types.emplace_back(T::ID);
+        m_callbacks[T::ID] = [this](IEvent & event){ OnEvent(dynamic_cast<T &>(event)); };
     }
 
     virtual void OnEvent(T & event) = 0;

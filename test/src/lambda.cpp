@@ -3,16 +3,11 @@
 #include <GES/EventBus.hpp>
 
 
-struct AddEvent : IEvent {
-    static const std::string Name;
-    std::string Type() const override {
-	return Name;
-    }
-
+struct AddEvent : IEventTemplate<AddEvent> {
     AddEvent(int64_t number) : number(number) {}
     const int64_t number;
 };
-const std::string AddEvent::Name = "SimpleEvent";
+template<> const IEvent::Type_t IEventTemplate<AddEvent>::ID = 1;
 
 
 TEST(Lambda, simple) {
@@ -22,7 +17,7 @@ TEST(Lambda, simple) {
     auto handle1 = bus->Add(
 	std::make_unique<IEventListenerLambda<AddEvent>>(
 	    [&](AddEvent & event) -> void {
-		number += event.number;
+		    number += event.number;
 	    }
     ));
 

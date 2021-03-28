@@ -3,9 +3,9 @@
 #include "example.hpp"
 
 template<>
-const std::string IEventTemplate<BirthEvent>::Name = "BirthEvent";
+const IEvent::Type_t IEventTemplate<BirthEvent>::ID = 1;
 template<>
-const std::string IEventTemplate<DeathEvent>::Name = "DeathEvent";
+const IEvent::Type_t IEventTemplate<DeathEvent>::ID = 2;
 
 
 TEST(Example, example) {
