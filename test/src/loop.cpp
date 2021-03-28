@@ -41,14 +41,15 @@ TEST(Loop, simple) {
     // true modern C++ for loop
     auto bus = EventBus::Create();
 
-    size_t called = 0;
+    size_t events_created = 0;
+    size_t iteration_called = 0;
 
     size_t i = first_i;
     size_t sum = 0;
 
     auto handle = bus->Add(std::make_unique<IEventListenerLambda<LoopIterationEvent>>(
         [&](LoopIterationEvent & event) {
-            ++called;
+            ++events_created;
         }
     ));
 
@@ -57,7 +58,8 @@ TEST(Loop, simple) {
         [&i](LoopIterationEvent & event) {
             return i < last_i;
         },
-        [&i, &sum](LoopIterationEvent & event) {
+        [&i, &sum, &iteration_called](LoopIterationEvent & event) {
+            ++iteration_called;
             sum += i;
             ++i;
         }
@@ -70,7 +72,8 @@ TEST(Loop, simple) {
     }
 
     // check
-    EXPECT_EQ(called, last_i - first_i + 1);
+    EXPECT_EQ(events_created,   last_i - first_i + 1);
+    EXPECT_EQ(iteration_called, last_i - first_i);
     EXPECT_EQ(sum, sum_check);
 
 }
