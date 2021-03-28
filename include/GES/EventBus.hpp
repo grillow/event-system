@@ -16,12 +16,16 @@ public:
 
     template <EventDerived T, typename ...Args>
     constexpr void Raise(Args&&... args) {
-        Dispatch(std::make_unique<T>(std::forward<Args>(args)...));
+        Raise(std::make_unique<T>(std::forward<Args>(args)...));
     }
+    void Raise(std::unique_ptr<IEvent> event);
 
-    void Dispatch(std::unique_ptr<IEvent> event);
-
+    template <EventListenerBaseDerived T, typename ...Args>
+    constexpr /*[[nodiscard]]*/ EventListenerHandle Add(Args&&... args) {
+        return Add(std::make_unique<T>(std::forward<Args>(args)...));
+    }
     [[nodiscard]] EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
+    
     void Remove(EventListenerHandle && handle);
 
 private:

@@ -12,7 +12,7 @@ friend struct EventBus;
 public:
     Impl();
     
-    void Dispatch(std::unique_ptr<IEvent> event);
+    void Raise(std::unique_ptr<IEvent> event);
     
     EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
     
