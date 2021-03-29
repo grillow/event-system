@@ -8,7 +8,7 @@
 
 
 struct EventBus::Impl {
-friend struct EventBus;
+friend class EventBus;
 public:
     Impl();
     
