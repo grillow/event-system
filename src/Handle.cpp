@@ -45,7 +45,6 @@ EventBus::Handle::Handle(std::weak_ptr<EventBus> bus, const id_t id) :
     {}
 
 
-
 /*
  *  EventBus::InternalHandle
  */
