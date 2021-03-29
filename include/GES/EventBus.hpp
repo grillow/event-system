@@ -38,20 +38,22 @@ public:
 
     EventBus(std::shared_ptr<EventBus> bus);
     EventBus(const EventBus & other) = delete;
-    ~EventBus();
 
+    // Raise Event
     template <EventDerived T, typename ...Args>
     constexpr void Raise(Args&&... args) {
         Raise(std::make_unique<T>(std::forward<Args>(args)...));
     }
     void Raise(std::unique_ptr<IEvent> event);
 
+    // Add Event Listener
     template <EventListenerBaseDerived T, typename ...Args>
     [[nodiscard]] constexpr Handle Add(Args&&... args) {
         return Add(std::make_unique<T>(std::forward<Args>(args)...));
     }
     [[nodiscard]] Handle Add(std::unique_ptr<IEventListenerBase> listener);
     
+    // Remove Event Listener
     void Remove(Handle && handle);
 
 private:

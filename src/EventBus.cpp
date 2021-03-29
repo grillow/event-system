@@ -11,11 +11,6 @@ std::shared_ptr<EventBus> EventBus::Create() {
 EventBus::EventBus(std::shared_ptr<EventBus> bus) : m_bus(bus) {}
 
 
-EventBus::~EventBus() {
-    m_bus = std::shared_ptr<EventBus>(nullptr);
-}
-
-
 void EventBus::Raise(std::unique_ptr<IEvent> event) {
     for (auto & listener : m_listeners_type[event->Type()]) {
         auto shared = listener.lock();
