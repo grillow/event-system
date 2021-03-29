@@ -8,7 +8,7 @@ struct UniqueGenerator final {
    
     UniqueGenerator() : m_next(0) {}
 
-    uint64_t Get() {
+    T Get() {
         for (T index = m_next; index < m_values.size(); ++index) {
             if (!m_values[index]) {
                 m_values[index] = true;

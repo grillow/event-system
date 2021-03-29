@@ -29,7 +29,7 @@ bool operator< (const EventListenerHandle & left,
 }
 
 
-EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id) :
+EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const id_t id) :
         m_bus(bus),
         m_id(id)
     {}
@@ -40,7 +40,7 @@ EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const uint
  *  Hidden
  */
 
-EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const uint64_t id) :
+EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle::id_t id) :
         m_id(id)
     {}
 

@@ -13,7 +13,7 @@ void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
 
 
 EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
-    const uint64_t unique_id = m_generator.Get();
+    const EventListenerHandle::id_t unique_id = m_generator.Get();
     
     const EventListenerHandleHidden handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
@@ -26,7 +26,7 @@ EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> list
 
 
 void EventBus::Impl::Remove(EventListenerHandle && handle) {
-    const uint64_t unique_id = handle.m_id;
+    const EventListenerHandle::id_t unique_id = handle.m_id;
     m_generator.Release(unique_id);
 
     EventListenerHandleHidden hidden(handle);

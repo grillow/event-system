@@ -36,17 +36,15 @@ private:
     > m_listeners_type;
 
 private:
-    UniqueGenerator<uint64_t> m_generator;
-
+    UniqueGenerator<EventListenerHandle::id_t> m_generator;
 };
 
 
 struct EventBus::Impl::EventListenerHandleHidden final {
-    explicit EventListenerHandleHidden(const uint64_t id);
+    explicit EventListenerHandleHidden(const EventListenerHandle::id_t id);
     explicit EventListenerHandleHidden(const EventListenerHandle & handle);
 
-public:
-    const uint64_t m_id;
+    const EventListenerHandle::id_t m_id;
 
 public:
     friend constexpr bool operator< (const EventListenerHandleHidden & left,

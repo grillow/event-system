@@ -6,7 +6,8 @@ struct EventBus;
 
 struct EventListenerHandle final {
 friend struct EventBus;
-public:
+    using id_t = uint64_t;
+
     EventListenerHandle(const EventListenerHandle & other) = delete;
     EventListenerHandle(EventListenerHandle && other);
     ~EventListenerHandle();
@@ -14,16 +15,13 @@ public:
     void Release();
     bool Active() const;
 
-public:
     friend bool operator< (const EventListenerHandle & left,
                            const EventListenerHandle & right);
 
 private:
-    EventListenerHandle(std::weak_ptr<EventBus> bus, const uint64_t id);
+    EventListenerHandle(std::weak_ptr<EventBus> bus, const id_t id);
     
-private:
     std::weak_ptr<EventBus> m_bus;
-    const uint64_t m_id;
-
+    const id_t m_id;
 };
 
