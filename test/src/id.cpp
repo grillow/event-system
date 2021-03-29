@@ -39,7 +39,7 @@ TEST(id, uniqueness) {
     EXPECT_EQ(called[0], false); EXPECT_EQ(called[1], true); EXPECT_EQ(called[2], false);
     reset();
 
-    auto handle_0_new = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback0));
+    handle_0 = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback0));
     auto handle_2 = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback2));
     bus->Raise<EmptyEvent>();
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], true); EXPECT_EQ(called[2], true);
@@ -50,8 +50,7 @@ TEST(id, uniqueness) {
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], false); EXPECT_EQ(called[2], true);
     reset();
 
-    handle_2.Release();
-    auto handle_2_new = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback2));
+    handle_2 = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback2));
     bus->Raise<EmptyEvent>();
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], false); EXPECT_EQ(called[2], true);
 

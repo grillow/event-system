@@ -1,5 +1,4 @@
 #pragma once
-#include "EventListenerHandle.hpp"
 #include "EventBus.hpp"
 
 #include <list>
@@ -9,6 +8,6 @@ struct Handler {
 		    std::unique_ptr<IEventListenerBase> listener);
 
 private:
-    std::list<EventListenerHandle> m_handles;
+    std::list<EventBus::Handle> m_handles;
 };
 
