@@ -1,5 +1,4 @@
 #include "EventBus.hpp"
-#include "EventBus.Impl.hpp"
 
 
 /*
@@ -48,15 +47,15 @@ EventBus::Handle::Handle(std::weak_ptr<EventBus> bus, const id_t id) :
 
 
 /*
- *  EventBus::Impl::Handle
+ *  EventBus::InternalHandle
  */
 
-EventBus::Impl::Handle::Handle(
+EventBus::InternalHandle::InternalHandle(
         const EventBus::Handle::id_t id) :
         m_id(id)
     {}
 
-EventBus::Impl::Handle::Handle(
+EventBus::InternalHandle::InternalHandle(
         const EventBus::Handle & handle) :
         m_id(handle.m_id)
     {}

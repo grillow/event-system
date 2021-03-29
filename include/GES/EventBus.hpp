@@ -1,8 +1,12 @@
 #pragma once
 #include "IEvent.hpp"
+#include "Utils/UniqueGenerator.hpp"
 #include "IEventListener.hpp"
 
+#include <utility>
 #include <memory>
+#include <list>
+#include <map>
 
 
 class EventBus final {
@@ -24,7 +28,7 @@ public:
 
     private:
         Handle(std::weak_ptr<EventBus> bus, const id_t id);
-        
+
         std::weak_ptr<EventBus> m_bus;
         id_t m_id;
     };
@@ -32,9 +36,9 @@ public:
 public:
     static std::shared_ptr<EventBus> Create();
 
-    ~EventBus();
-
+    EventBus(std::shared_ptr<EventBus> bus);
     EventBus(const EventBus & other) = delete;
+    ~EventBus();
 
     template <EventDerived T, typename ...Args>
     constexpr void Raise(Args&&... args) {
@@ -51,13 +55,43 @@ public:
     void Remove(Handle && handle);
 
 private:
-    struct Impl;
+    std::weak_ptr<EventBus> m_bus;
+    struct InternalHandle;
+    
+    std::map<
+        InternalHandle,
+        std::shared_ptr<IEventListenerBase>
+    > m_listeners_handle;
+    
+    std::map<
+        IEvent::Type_t,
+        std::list<
+            std::weak_ptr<IEventListenerBase> 
+        >
+    > m_listeners_type;
 
-public:
-    EventBus(std::unique_ptr<EventBus::Impl> impl); // could not manage to make it private
+    UniqueGenerator<EventBus::Handle::id_t> m_generator;
+};
 
-private:
-    std::unique_ptr<EventBus::Impl> m_pimpl;
 
+/*
+ *  EventBus::InternalHandle
+ */
+
+struct EventBus::InternalHandle final {
+    explicit InternalHandle(const Handle::id_t id);
+    explicit InternalHandle(const Handle & handle);
+
+    const Handle::id_t m_id;
+
+    friend constexpr bool operator< (const InternalHandle & left,
+            const InternalHandle & right) {
+        return left.m_id < right.m_id;
+    }
+
+    friend constexpr bool operator==(const InternalHandle & left,
+            const InternalHandle & right) {
+        return left.m_id == right.m_id;
+    }
 };
 
