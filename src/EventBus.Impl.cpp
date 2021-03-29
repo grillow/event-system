@@ -12,24 +12,24 @@ void EventBus::Impl::Raise(std::unique_ptr<IEvent> event) {
 }
 
 
-EventListenerHandle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
-    const EventListenerHandle::id_t unique_id = m_generator.Get();
+EventBus::Handle EventBus::Impl::Add(std::unique_ptr<IEventListenerBase> listener) {
+    const EventBus::Handle::id_t unique_id = m_generator.Get();
     
-    const EventListenerHandleHidden handle(unique_id);
+    const Handle handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
     auto ref = m_listeners_handle[handle];
     for (auto type : ref->Types()) {
         m_listeners_type[type].emplace_back(ref);
     }
-    return EventListenerHandle(std::shared_ptr<EventBus>(m_bus), handle.m_id);
+    return EventBus::Handle(std::shared_ptr<EventBus>(m_bus), handle.m_id);
 }
 
 
-void EventBus::Impl::Remove(EventListenerHandle && handle) {
-    const EventListenerHandle::id_t unique_id = handle.m_id;
+void EventBus::Impl::Remove(EventBus::Handle && handle) {
+    const EventBus::Handle::id_t unique_id = handle.m_id;
     m_generator.Release(unique_id);
 
-    EventListenerHandleHidden hidden(handle);
+    Handle hidden(handle);
 
     std::shared_ptr<IEventListenerBase> ref =
         std::shared_ptr<IEventListenerBase>(m_listeners_handle[hidden]);
@@ -75,12 +75,12 @@ void EventBus::Raise(std::unique_ptr<IEvent> event) {
 }
 
 
-EventListenerHandle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {
+EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {
     return m_pimpl->Add(std::move(listener));
 }
 
 
-void EventBus::Remove(EventListenerHandle && handle) {
+void EventBus::Remove(EventBus::Handle && handle) {
     m_pimpl->Remove(std::move(handle));
 }
 

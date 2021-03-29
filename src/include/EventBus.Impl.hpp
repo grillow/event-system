@@ -14,17 +14,17 @@ public:
     
     void Raise(std::unique_ptr<IEvent> event);
     
-    EventListenerHandle Add(std::unique_ptr<IEventListenerBase> listener);
+    EventBus::Handle Add(std::unique_ptr<IEventListenerBase> listener);
     
-    void Remove(EventListenerHandle && handle);
+    void Remove(EventBus::Handle && handle);
 
 private:
-    struct EventListenerHandleHidden;
+    struct Handle;
 
     std::weak_ptr<EventBus> m_bus;
     
     std::map<
-        EventListenerHandleHidden,
+        Handle,
         std::shared_ptr<IEventListenerBase>
     > m_listeners_handle;
     
@@ -36,24 +36,24 @@ private:
     > m_listeners_type;
 
 private:
-    UniqueGenerator<EventListenerHandle::id_t> m_generator;
+    UniqueGenerator<EventBus::Handle::id_t> m_generator;
 };
 
 
-struct EventBus::Impl::EventListenerHandleHidden final {
-    explicit EventListenerHandleHidden(const EventListenerHandle::id_t id);
-    explicit EventListenerHandleHidden(const EventListenerHandle & handle);
+struct EventBus::Impl::Handle final {
+    explicit Handle(const EventBus::Handle::id_t id);
+    explicit Handle(const EventBus::Handle & handle);
 
-    const EventListenerHandle::id_t m_id;
+    const EventBus::Handle::id_t m_id;
 
 public:
-    friend constexpr bool operator< (const EventListenerHandleHidden & left,
-            const EventListenerHandleHidden & right) {
+    friend constexpr bool operator< (const Handle & left,
+            const Handle & right) {
         return left.m_id < right.m_id;
     }
 
-    friend constexpr bool operator==(const EventListenerHandleHidden & left,
-            const EventListenerHandleHidden & right) {
+    friend constexpr bool operator==(const Handle & left,
+            const Handle & right) {
         return left.m_id == right.m_id;
     }
 };
