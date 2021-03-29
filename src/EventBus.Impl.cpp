@@ -56,9 +56,8 @@ void EventBus::Impl::Remove(EventListenerHandle && handle) {
  */
 
 std::shared_ptr<EventBus> EventBus::Create() {
-    std::shared_ptr<EventBus> bus(
-            std::make_shared<EventBus>(
-                std::make_unique<EventBus::Impl>()));
+    std::shared_ptr<EventBus> bus =
+        std::make_shared<EventBus>(std::make_unique<EventBus::Impl>());
     bus->m_pimpl->m_bus = bus;
 
     return bus;

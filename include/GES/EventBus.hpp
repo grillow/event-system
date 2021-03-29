@@ -5,8 +5,8 @@
 
 #include <memory>
 
-class EventBus final {
 
+class EventBus final {
 public:
     static std::shared_ptr<EventBus> Create();
 
