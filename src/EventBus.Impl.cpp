@@ -1,6 +1,10 @@
 #include "EventBus.Impl.hpp"
 
 
+/*
+ *  EventBus::Impl
+ */
+
 EventBus::Impl::Impl() : m_bus(std::shared_ptr<EventBus>(nullptr)) {}
 
 
