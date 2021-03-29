@@ -36,7 +36,7 @@ private:
     > m_listeners_type;
 
 private:
-    UniqueGenerator m_generator;
+    UniqueGenerator<uint64_t> m_generator;
 
 };
 
