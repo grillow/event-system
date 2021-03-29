@@ -12,7 +12,6 @@ void EventListenerHandle::Release() {
     if (auto bus = m_bus.lock()) {
         bus->Remove(std::move(*this));
     }
-    m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
 bool EventListenerHandle::Active() const {
@@ -21,6 +20,7 @@ bool EventListenerHandle::Active() const {
 
 EventListenerHandle::~EventListenerHandle() {
     Release();
+    m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
 bool operator< (const EventListenerHandle & left,
