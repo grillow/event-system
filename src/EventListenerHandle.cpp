@@ -8,6 +8,15 @@ EventListenerHandle::EventListenerHandle(EventListenerHandle && other) :
     other.m_bus = std::shared_ptr<EventBus>(nullptr);
 }
 
+EventListenerHandle & EventListenerHandle::operator= (EventListenerHandle && other) {
+    m_bus = other.m_bus;
+    m_id  = other.m_id;
+
+    other.m_bus = std::shared_ptr<EventBus>(nullptr);
+
+    return *this;
+}
+
 void EventListenerHandle::Release() {
     if (auto bus = m_bus.lock()) {
         bus->Remove(std::move(*this));
@@ -40,11 +49,13 @@ EventListenerHandle::EventListenerHandle(std::weak_ptr<EventBus> bus, const id_t
  *  Hidden
  */
 
-EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle::id_t id) :
+EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(
+        const EventListenerHandle::id_t id) :
         m_id(id)
     {}
 
-EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(const EventListenerHandle & handle) :
+EventBus::Impl::EventListenerHandleHidden::EventListenerHandleHidden(
+        const EventListenerHandle & handle) :
         m_id(handle.m_id)
     {}
 

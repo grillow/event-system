@@ -10,6 +10,7 @@ friend struct EventBus;
 
     EventListenerHandle(const EventListenerHandle & other) = delete;
     EventListenerHandle(EventListenerHandle && other);
+    EventListenerHandle & operator= (EventListenerHandle && other);
     ~EventListenerHandle();
 
     void Release();
@@ -22,6 +23,6 @@ private:
     EventListenerHandle(std::weak_ptr<EventBus> bus, const id_t id);
     
     std::weak_ptr<EventBus> m_bus;
-    const id_t m_id;
+    id_t m_id;
 };
 
