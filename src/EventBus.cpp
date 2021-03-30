@@ -8,7 +8,7 @@ std::shared_ptr<EventBus> EventBus::Create() {
 }
 
 
-EventBus::EventBus(std::shared_ptr<EventBus> bus) : m_bus(bus) {}
+EventBus::EventBus(std::weak_ptr<EventBus> bus) : m_bus(bus) {}
 
 
 void EventBus::Raise(std::unique_ptr<IEvent> event) {
