@@ -12,9 +12,10 @@ EventBus::EventBus(std::weak_ptr<EventBus> bus) : m_bus(bus) {}
 
 
 void EventBus::Raise(std::unique_ptr<IEvent> event) {
-    for (auto & listener : m_listeners_type[event->Type()]) {
-        auto shared = listener.lock();
-        shared->Receive(*event);
+    for (auto & priority_map : m_listeners) {
+        for (auto & listener : priority_map.second[event->Type()]) {
+            listener.lock()->Receive(*event);
+        }
     }
 }
 
@@ -26,7 +27,7 @@ EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {
     m_listeners_handle[handle] = std::move(listener);
     auto ref = m_listeners_handle[handle];
     for (auto type : ref->Types()) {
-        m_listeners_type[type].emplace_back(ref);
+        m_listeners[ref->Priority()][type].emplace_back(ref);
     }
     return Handle(m_bus, handle.m_id);
 }
@@ -41,15 +42,19 @@ void EventBus::Remove(EventBus::Handle && handle) {
     std::shared_ptr<IEventListenerBase> ref =
         std::shared_ptr<IEventListenerBase>(m_listeners_handle[hidden]);
 
-    for (auto & listeners : m_listeners_type) {
-        auto it = listeners.second.begin();
-        while (it != listeners.second.end()) {
-            if (std::shared_ptr<IEventListenerBase>(*it) == ref) {
-                it = listeners.second.erase(it);
-            } else {
-                ++it;
+    ///TODO: optimize
+    for (auto & priority_map : m_listeners) {
+        for (auto & listeners : priority_map.second) {
+            auto it = listeners.second.begin();
+            while (it != listeners.second.end()) {
+                if (std::shared_ptr<IEventListenerBase>(*it) == ref) {
+                    it = listeners.second.erase(it);
+                } else {
+                    ++it;
+                }
             }
         }
+
     }
     
     m_listeners_handle.erase(hidden);

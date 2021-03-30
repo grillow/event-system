@@ -2,9 +2,10 @@
 #include "IEvent.hpp"
 #include "Utils/UniqueGenerator.hpp"
 #include "IEventListener.hpp"
+#include "Priority.hpp"
 
-#include <utility>
 #include <memory>
+#include <array>
 #include <list>
 #include <map>
 
@@ -63,18 +64,21 @@ public:
 private:
     std::weak_ptr<EventBus> m_bus;
     struct InternalHandle;
-    
+
+        
     std::map<
         InternalHandle,
         std::shared_ptr<IEventListenerBase>
     > m_listeners_handle;
-    
-    std::map<
-        IEvent::Type_t,
-        std::list<
-            std::weak_ptr<IEventListenerBase> 
+   
+    std::map<Priority::DefaultPrioritySystem,
+        std::map<
+            IEvent::Type_t,
+            std::list<
+                std::weak_ptr<IEventListenerBase> 
+            >
         >
-    > m_listeners_type;
+    > m_listeners;
 
     UniqueGenerator<EventBus::Handle::id_t> m_generator;
 };
