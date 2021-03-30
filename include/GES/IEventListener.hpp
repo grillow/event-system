@@ -50,7 +50,7 @@ protected:
 
 template <EventDerived T>
 struct IEventListener : virtual IEventListenerResource {
-    constexpr IEventListener(){
+    constexpr IEventListener() {
         m_types.emplace_back(T::ID);
         m_callbacks[T::ID] = [this](IEvent & event){ OnEvent(dynamic_cast<T &>(event)); };
     }
