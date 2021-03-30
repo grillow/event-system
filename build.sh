@@ -10,7 +10,7 @@ BIN_PATH="$SCRIPT_DIR_PATH/bin"
 mkdir -p $BUILD_PATH
 cd $BUILD_PATH
 time cmake ..  || exit 1
-time make -j4  || exit 1
+time make      || exit 1
 time make test || exit 1
 time valgrind --error-exitcode=1 --leak-check=full -s $BIN_PATH/Test
 
