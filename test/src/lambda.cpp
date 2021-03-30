@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <GES/EventBus.hpp>
+#include <GES/GES.hpp>
 
 
 struct AddEvent : IEventTemplate<AddEvent> {

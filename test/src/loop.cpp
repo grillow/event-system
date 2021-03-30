@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <GES/EventBus.hpp>
-#include <GES/Handler.hpp>
+#include <GES/GES.hpp>
 
 #include <functional>
 

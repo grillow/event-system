@@ -1,6 +1,5 @@
 #pragma once
-#include <GES/EventBus.hpp>
-#include <GES/Handler.hpp>
+#include <GES/GES.hpp>
 
 #include <string>
 
