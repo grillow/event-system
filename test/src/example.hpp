@@ -59,11 +59,13 @@ private:
 };
 
 
-struct PopulationListenerHandler : Handler {
+struct PopulationListenerHandler {
     PopulationListenerHandler(std::shared_ptr<EventBus> bus,
             std::weak_ptr<PopulationStats> stats) {
-        Subscribe(bus, std::make_unique<PopulationListener>(stats));
+        handler.Subscribe(bus, std::make_unique<PopulationListener>(stats));
     }
+private:
+	Handler handler;
 };
 
 struct PopulationListenerLambda :
@@ -78,13 +80,15 @@ struct PopulationListenerLambda :
         {}
 };
 
-struct PopulationListenerLambdaHandler : Handler {
+struct PopulationListenerLambdaHandler {
     PopulationListenerLambdaHandler(std::shared_ptr<EventBus> bus,
             IEventListenerResource::callback_t<BirthEvent> callback_birth,
             IEventListenerResource::callback_t<DeathEvent> callback_death) {
-        Subscribe(bus, std::make_unique<PopulationListenerLambda>(
+        handler.Subscribe(bus, std::make_unique<PopulationListenerLambda>(
             callback_birth, callback_death
         ));
     }
+private:
+	Handler handler;
 };
 

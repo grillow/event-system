@@ -4,6 +4,7 @@
 #include "IEventListener.hpp"
 #include "Priority.hpp"
 
+#include <initializer_list>
 #include <memory>
 #include <array>
 #include <list>

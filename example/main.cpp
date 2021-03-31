@@ -29,19 +29,19 @@ private:
 };
 
 
-struct ExampleStruct : public Handler {
-public:
+struct ExampleStruct {
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
-        Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
+        handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
         bus->Raise<ExampleEvent>(808);
-       	Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
+       	handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
     }
 
     ~ExampleStruct() {
         std::cout << "~ExampleStruct()" << std::endl;
     }
-
+private:
+	Handler handler;
 };
 
 int main() {

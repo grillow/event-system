@@ -3,7 +3,7 @@
 
 #include <list>
 
-struct Handler {
+struct Handler final {
     void Subscribe(std::shared_ptr<EventBus> bus,
 		    std::unique_ptr<IEventListenerBase> listener);
 
