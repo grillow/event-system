@@ -20,14 +20,15 @@ void EventBus::Raise(std::unique_ptr<IEvent> event) {
 }
 
 
-EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener) {
+EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener,
+		Priority::DefaultPrioritySystem priority) {
     const Handle::id_t unique_id = m_generator.Get();
 
     const InternalHandle handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
     auto ref = m_listeners_handle[handle];
     for (auto type : ref->Types()) {
-        m_listeners[ref->Priority()][type].emplace_back(ref);
+        m_listeners[priority][type].emplace_back(ref);
     }
     return Handle(m_bus, handle.m_id);
 }
