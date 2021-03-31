@@ -19,8 +19,8 @@ TEST(id, uniqueness) {
 
     auto bus = EventBus::Create();
 
-    auto handle_0 = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback0));
-    auto handle_1 = bus->Add(std::make_unique<IEventListenerLambda<EmptyEvent>>(callback1));
+    auto handle_0 = bus->Add<IEventListenerLambda<EmptyEvent>>(callback0);
+    auto handle_1 = bus->Add<IEventListenerLambda<EmptyEvent>>(callback1);
     
     reset();
     bus->Raise<EmptyEvent>();

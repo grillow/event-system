@@ -14,7 +14,7 @@ struct IEventListenerBase {
 };
 
 template <typename T>
-concept EventListenerBaseDerived = std::is_base_of<IEvent, T>::value;
+concept EventListenerBaseDerived = std::is_base_of<IEventListenerBase, T>::value;
 
 
 // helper, do not use it

@@ -22,7 +22,8 @@ TEST(Lambda, simple) {
     ));
 
     EXPECT_EQ(number, 0);
-    bus->Raise<AddEvent>(1337);
+
+	bus->Raise<AddEvent>(1337);
     EXPECT_EQ(number, 1337);
 
     bus->Raise<AddEvent>(-1337);
