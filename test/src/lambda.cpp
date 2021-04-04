@@ -7,7 +7,7 @@ struct AddEvent : IEventTemplate<AddEvent> {
     AddEvent(int64_t number) : number(number) {}
     const int64_t number;
 };
-template<> const IEvent::Type_t IEventTemplate<AddEvent>::ID = 1;
+template<> const IEvent::Type_t IEventTemplate<AddEvent>::ID = "AddEvent"_t;
 
 
 TEST(Lambda, simple) {

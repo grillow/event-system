@@ -2,17 +2,11 @@
 
 #include "example.hpp"
 
-namespace EventType {
-    enum EventType : IEvent::Type_t {
-        BirthEvent,
-        DeathEvent
-    };
-}
 
 template<>
-const IEvent::Type_t IEventTemplate<BirthEvent>::ID = EventType::BirthEvent;
+const IEvent::Type_t IEventTemplate<BirthEvent>::ID = "BirthEvent"_t;
 template<>
-const IEvent::Type_t IEventTemplate<DeathEvent>::ID = EventType::DeathEvent;
+const IEvent::Type_t IEventTemplate<DeathEvent>::ID = "DeathEvent"_t;
 
 
 TEST(Example, ordinary) {

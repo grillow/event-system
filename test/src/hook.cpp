@@ -7,7 +7,7 @@ struct NumberEvent : IEventTemplate<NumberEvent> {
 	NumberEvent(int64_t number) : number(number) {}
 	int64_t number;
 };
-template<> const IEvent::Type_t IEventTemplate<NumberEvent>::ID = 1;
+template<> const IEvent::Type_t IEventTemplate<NumberEvent>::ID = "NumberEvent"_t;
 
 TEST(Priority, hook) {
     auto bus = EventBus::Create();

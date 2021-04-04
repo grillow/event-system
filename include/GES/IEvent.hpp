@@ -1,6 +1,8 @@
 #pragma once
 #include <type_traits>
+#include <functional>
 #include <cstdint>
+#include <string>
 
 
 struct IEvent {
@@ -8,6 +10,7 @@ struct IEvent {
     virtual ~IEvent() = default;
     virtual Type_t Type() const = 0;
 };
+
 
 template <typename T>
 concept EventDerived = std::is_base_of<IEvent, T>::value;
@@ -20,4 +23,9 @@ struct IEventTemplate : IEvent {
         return ID;
     }
 };
+
+/*constexpr*/ inline IEvent::Type_t operator""_t (const char * eventName,
+        const std::size_t size) {
+    return std::hash<std::string>{}(std::string(eventName, size));
+}
 

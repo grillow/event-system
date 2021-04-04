@@ -30,7 +30,7 @@ private:
     const iteration_t iteration;
 };
 template<>
-const IEvent::Type_t IEventTemplate<LoopIterationEvent>::ID = 1;
+const IEvent::Type_t IEventTemplate<LoopIterationEvent>::ID = "LoopIterationEvent"_t;
 
 
 TEST(Loop, simple) {
