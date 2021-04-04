@@ -14,11 +14,11 @@ TEST(Priority, hook) {
 	
 	int64_t number = 0;
 
-	auto receivehandle = bus->Add<IEventListenerLambda<NumberEvent>>(
+    auto receivehandle = bus->Add<IEventListenerLambda<NumberEvent>>(
         [&](NumberEvent & event) -> void {
             number = event.number;
         }
-	);
+    );
 
 	EXPECT_EQ(number, 0);
 	
