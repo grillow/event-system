@@ -1,8 +1,8 @@
 #pragma once
 #include <type_traits>
+#include <string_view>
 #include <functional>
 #include <cstdint>
-#include <string>
 
 
 struct IEvent {
@@ -26,6 +26,6 @@ struct IEventTemplate : IEvent {
 
 /*constexpr*/ inline IEvent::Type_t operator""_t (const char * eventName,
         const std::size_t size) {
-    return std::hash<std::string>{}(std::string(eventName, size));
+    return std::hash<std::string_view>{}(std::string_view(eventName, size));
 }
 
