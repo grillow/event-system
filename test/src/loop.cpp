@@ -1,37 +1,38 @@
 #include <gtest/gtest.h>
 
-#include <GES/EventBus.hpp>
-#include <GES/Handler.hpp>
+#include <GES/GES.hpp>
 
 #include <functional>
 
 
-struct LoopIterationEvent : IEventTemplate<LoopIterationEvent> {
-    using condition_t = std::function<bool(LoopIterationEvent &)>;
-    using iteration_t = std::function<void(LoopIterationEvent &)>;
-    
-    LoopIterationEvent(
-                std::shared_ptr<EventBus> bus,
-                condition_t condition,
-                iteration_t iteration
-            )
-            : bus(bus), condition(condition), iteration(iteration) {
-    }
-
-    ~LoopIterationEvent() {
-        if (condition(*this)) {
-            iteration(*this);
-            bus->Raise<LoopIterationEvent>(bus, condition, iteration);
+namespace Event {
+    struct LoopIteration : EventTemplate<LoopIteration> {
+        using condition_t = std::function<bool(LoopIteration &)>;
+        using iteration_t = std::function<void(LoopIteration &)>;
+        
+        LoopIteration(
+                    std::shared_ptr<EventBus> bus,
+                    condition_t condition,
+                    iteration_t iteration
+                )
+                : bus(bus), condition(condition), iteration(iteration) {
         }
-    }
 
-private:
-    std::shared_ptr<EventBus> bus;
-    const condition_t condition;
-    const iteration_t iteration;
-};
-template<>
-const IEvent::Type_t IEventTemplate<LoopIterationEvent>::ID = 1;
+        ~LoopIteration() {
+            if (condition(*this)) {
+                iteration(*this);
+                bus->Raise<LoopIteration>(bus, condition, iteration);
+            }
+        }
+
+    private:
+        std::shared_ptr<EventBus> bus;
+        const condition_t condition;
+        const iteration_t iteration;
+    };
+    template<>
+    const IEvent::Type_t EventTemplate<LoopIteration>::ID = "LoopIteration"_t;
+}
 
 
 TEST(Loop, simple) {
@@ -47,18 +48,18 @@ TEST(Loop, simple) {
     size_t i = first_i;
     size_t sum = 0;
 
-    auto handle = bus->Add(std::make_unique<IEventListenerLambda<LoopIterationEvent>>(
-        [&](LoopIterationEvent & event) {
+    auto handle = bus->Add<EventListenerLambda<Event::LoopIteration>>(
+        [&](Event::LoopIteration & event) {
             ++events_created;
         }
-    ));
+    );
 
-    bus->Raise<LoopIterationEvent>(
+    bus->Raise<Event::LoopIteration>(
         bus,
-        [&i](LoopIterationEvent & event) {
+        [&i](Event::LoopIteration & event) {
             return i < last_i;
         },
-        [&i, &sum, &iteration_called](LoopIterationEvent & event) {
+        [&i, &sum, &iteration_called](Event::LoopIteration & event) {
             ++iteration_called;
             sum += i;
             ++i;

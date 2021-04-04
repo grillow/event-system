@@ -7,20 +7,20 @@
 
 std::shared_ptr<EventBus> bus = EventBus::Create(); // global :3
 
+namespace Event {
+    struct Example : EventTemplate<Example> {
+        Example(const uint64_t number) : number(number) {}
 
-struct ExampleEvent : IEventTemplate<ExampleEvent> {
-    ExampleEvent(const uint64_t number) : number(number) {}
+        const uint64_t number;
+    };
+    template<>
+    const IEvent::Type_t EventTemplate<Example>::ID = "Example"_t;
+}
 
-    const uint64_t number;
-};
-template<>
-const IEvent::Type_t IEventTemplate<ExampleEvent>::ID = 1;
-
-
-struct ExampleEventListener : public IEventListener<ExampleEvent> {
+struct ExampleEventListener : EventListener<Event::Example> {
     ExampleEventListener(std::string name) : m_name(std::move(name)) {}
 
-    virtual void OnEvent(ExampleEvent & event) override {
+    virtual void OnEvent(Event::Example & event) override {
         std::cout << m_name << " received: " << event.number << std::endl;
     }
 
@@ -29,19 +29,19 @@ private:
 };
 
 
-struct ExampleStruct : public Handler {
-public:
+struct ExampleStruct {
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
-        Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
-        bus->Raise<ExampleEvent>(808);
-       	Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
+        handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
+        bus->Raise<Event::Example>(808);
+       	handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
     }
 
     ~ExampleStruct() {
         std::cout << "~ExampleStruct()" << std::endl;
     }
-
+private:
+	Handler handler;
 };
 
 int main() {
@@ -50,11 +50,11 @@ int main() {
     {
         ExampleStruct sample;
 
-        bus->Raise<ExampleEvent>(1337);
-        bus->Raise<ExampleEvent>(1488);
+        bus->Raise<Event::Example>(1337);
+        bus->Raise<Event::Example>(1488);
     }
 
-    bus->Raise<ExampleEvent>(404);
+    bus->Raise<Event::Example>(404);
     
 
     return 0;

@@ -2,15 +2,21 @@
 #include "IEvent.hpp"
 #include "Utils/UniqueGenerator.hpp"
 #include "IEventListener.hpp"
+#include "Priority.hpp"
 
-#include <utility>
+#include <initializer_list>
 #include <memory>
+#include <array>
 #include <list>
 #include <map>
 
 
 class EventBus final {
 public:
+    /*
+     *  EventBus::Handle
+     */
+
     struct Handle final {
         friend class EventBus;
 
@@ -36,7 +42,7 @@ public:
 public:
     static std::shared_ptr<EventBus> Create();
 
-    EventBus(std::shared_ptr<EventBus> bus);
+    EventBus(std::weak_ptr<EventBus> bus);    ///TODO: make it private
     EventBus(const EventBus & other) = delete;
 
     // Raise Event
@@ -49,9 +55,14 @@ public:
     // Add Event Listener
     template <EventListenerBaseDerived T, typename ...Args>
     [[nodiscard]] constexpr Handle Add(Args&&... args) {
-        return Add(std::make_unique<T>(std::forward<Args>(args)...));
+        return Add<T>(Priority::DEFAULT, std::forward<Args>(args)...);
     }
-    [[nodiscard]] Handle Add(std::unique_ptr<IEventListenerBase> listener);
+    template <EventListenerBaseDerived T, typename ...Args>
+    [[nodiscard]] constexpr Handle Add(Priority priority, Args&&... args) {
+        return Add(std::make_unique<T>(std::forward<Args>(args)...), priority);
+    }
+    [[nodiscard]] Handle Add(std::unique_ptr<IEventListenerBase> listener,
+		    Priority priority = Priority::DEFAULT);
     
     // Remove Event Listener
     void Remove(Handle && handle);
@@ -59,18 +70,21 @@ public:
 private:
     std::weak_ptr<EventBus> m_bus;
     struct InternalHandle;
-    
+
+        
     std::map<
         InternalHandle,
         std::shared_ptr<IEventListenerBase>
     > m_listeners_handle;
-    
-    std::map<
-        IEvent::Type_t,
-        std::list<
-            std::weak_ptr<IEventListenerBase> 
+   
+    std::map<Priority,
+        std::map<
+            IEvent::Type_t,
+            std::list<
+                std::weak_ptr<IEventListenerBase> 
+            >
         >
-    > m_listeners_type;
+    > m_listeners;
 
     UniqueGenerator<EventBus::Handle::id_t> m_generator;
 };
