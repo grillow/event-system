@@ -19,8 +19,8 @@ TEST(id, uniqueness) {
 
     auto bus = EventBus::Create();
 
-    auto handle_0 = bus->Add<IEventListenerLambda<Event::Empty>>(callback0);
-    auto handle_1 = bus->Add<IEventListenerLambda<Event::Empty>>(callback1);
+    auto handle_0 = bus->Add<EventListenerLambda<Event::Empty>>(callback0);
+    auto handle_1 = bus->Add<EventListenerLambda<Event::Empty>>(callback1);
     
     reset();
     bus->Raise<Event::Empty>();
@@ -29,7 +29,7 @@ TEST(id, uniqueness) {
 
     {
         handle_0.Release();
-        auto handle_2 = bus->Add<IEventListenerLambda<Event::Empty>>(callback2);
+        auto handle_2 = bus->Add<EventListenerLambda<Event::Empty>>(callback2);
         bus->Raise<Event::Empty>();
         EXPECT_EQ(called[0], false); EXPECT_EQ(called[1], true); EXPECT_EQ(called[2], true);
         reset();
@@ -39,8 +39,8 @@ TEST(id, uniqueness) {
     EXPECT_EQ(called[0], false); EXPECT_EQ(called[1], true); EXPECT_EQ(called[2], false);
     reset();
 
-    handle_0 = bus->Add<IEventListenerLambda<Event::Empty>>(callback0);
-    auto handle_2 = bus->Add<IEventListenerLambda<Event::Empty>>(callback2);
+    handle_0 = bus->Add<EventListenerLambda<Event::Empty>>(callback0);
+    auto handle_2 = bus->Add<EventListenerLambda<Event::Empty>>(callback2);
     bus->Raise<Event::Empty>();
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], true); EXPECT_EQ(called[2], true);
     reset();
@@ -50,7 +50,7 @@ TEST(id, uniqueness) {
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], false); EXPECT_EQ(called[2], true);
     reset();
 
-    handle_2 = bus->Add<IEventListenerLambda<Event::Empty>>(callback2);
+    handle_2 = bus->Add<EventListenerLambda<Event::Empty>>(callback2);
     bus->Raise<Event::Empty>();
     EXPECT_EQ(called[0], true); EXPECT_EQ(called[1], false); EXPECT_EQ(called[2], true);
 

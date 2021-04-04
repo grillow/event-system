@@ -48,7 +48,7 @@ TEST(Loop, simple) {
     size_t i = first_i;
     size_t sum = 0;
 
-    auto handle = bus->Add<IEventListenerLambda<Event::LoopIteration>>(
+    auto handle = bus->Add<EventListenerLambda<Event::LoopIteration>>(
         [&](Event::LoopIteration & event) {
             ++events_created;
         }

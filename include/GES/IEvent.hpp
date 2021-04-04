@@ -19,7 +19,7 @@ concept EventDerived = std::is_base_of<IEvent, T>::value;
 
 // tools
 template <typename T>
-struct IEventTemplate : IEvent {
+struct EventTemplate : IEvent {
     static const Type_t ID;
     Type_t Type() const override final {
         return ID;

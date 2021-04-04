@@ -16,7 +16,7 @@ TEST(Priority, hook) {
 	int64_t number = 0;
 
     // victim
-    auto receivehandle = bus->Add<IEventListenerLambda<Event::Number>>(
+    auto receivehandle = bus->Add<EventListenerLambda<Event::Number>>(
         [&](Event::Number & event) -> void {
             number = event.number;
         }
@@ -28,7 +28,7 @@ TEST(Priority, hook) {
 	EXPECT_EQ(number, 1337);
 
     // hook
-    auto hookhandle = bus->Add<IEventListenerLambda<Event::Number>>(
+    auto hookhandle = bus->Add<EventListenerLambda<Event::Number>>(
         Priority::HOOK,
         [](Event::Number & event) {
             event.number = -event.number;

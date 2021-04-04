@@ -15,7 +15,7 @@ TEST(Lambda, simple) {
     int64_t number = 0;
 
     auto handle1 = bus->Add(
-	std::make_unique<IEventListenerLambda<Event::Add>>(
+	std::make_unique<EventListenerLambda<Event::Add>>(
 	    [&](Event::Add & event) -> void {
 		    number += event.number;
 	    }
