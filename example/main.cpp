@@ -8,13 +8,13 @@
 std::shared_ptr<EventBus> bus = EventBus::Create(); // global :3
 
 namespace Event {
-    struct Example : IEventTemplate<Example> {
+    struct Example : EventTemplate<Example> {
         Example(const uint64_t number) : number(number) {}
 
         const uint64_t number;
     };
     template<>
-    const IEvent::Type_t IEventTemplate<Example>::ID = "Example"_t;
+    const IEvent::Type_t EventTemplate<Example>::ID = "Example"_t;
 }
 
 struct ExampleEventListener : EventListener<Event::Example> {

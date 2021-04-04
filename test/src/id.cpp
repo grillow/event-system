@@ -6,8 +6,8 @@
 #include <array>
 
 namespace Event {
-    struct Empty : IEventTemplate<Empty> {};
-    template<> const IEvent::Type_t IEventTemplate<Empty>::ID = "Empty"_t;
+    struct Empty : EventTemplate<Empty> {};
+    template<> const IEvent::Type_t EventTemplate<Empty>::ID = "Empty"_t;
 }
 
 TEST(id, uniqueness) {

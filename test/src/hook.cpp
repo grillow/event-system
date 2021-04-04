@@ -3,11 +3,11 @@
 #include <GES/GES.hpp>
 
 namespace Event {
-    struct Number : IEventTemplate<Number> {
+    struct Number : EventTemplate<Number> {
         Number(int64_t number) : number(number) {}
         int64_t number;
     };
-    template<> const IEvent::Type_t IEventTemplate<Number>::ID = "Number"_t;
+    template<> const IEvent::Type_t EventTemplate<Number>::ID = "Number"_t;
 }
 
 TEST(Priority, hook) {

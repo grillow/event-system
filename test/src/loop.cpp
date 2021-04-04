@@ -6,7 +6,7 @@
 
 
 namespace Event {
-    struct LoopIteration : IEventTemplate<LoopIteration> {
+    struct LoopIteration : EventTemplate<LoopIteration> {
         using condition_t = std::function<bool(LoopIteration &)>;
         using iteration_t = std::function<void(LoopIteration &)>;
         
@@ -31,7 +31,7 @@ namespace Event {
         const iteration_t iteration;
     };
     template<>
-    const IEvent::Type_t IEventTemplate<LoopIteration>::ID = "LoopIteration"_t;
+    const IEvent::Type_t EventTemplate<LoopIteration>::ID = "LoopIteration"_t;
 }
 
 

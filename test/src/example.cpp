@@ -4,9 +4,9 @@
 
 
 template<>
-const IEvent::Type_t IEventTemplate<Event::Birth>::ID = "Birth"_t;
+const IEvent::Type_t EventTemplate<Event::Birth>::ID = "Birth"_t;
 template<>
-const IEvent::Type_t IEventTemplate<Event::Death>::ID = "Death"_t;
+const IEvent::Type_t EventTemplate<Event::Death>::ID = "Death"_t;
 
 
 TEST(Example, ordinary) {
