@@ -55,7 +55,7 @@ public:
     // Add Event Listener
     template <EventListenerBaseDerived T, typename ...Args>
     [[nodiscard]] constexpr Handle Add(Args&&... args) {
-        return Add<T>(Priority::DEFAULT, args...);
+        return Add<T>(Priority::DEFAULT, std::forward<Args>(args)...);
     }
     template <EventListenerBaseDerived T, typename ...Args>
     [[nodiscard]] constexpr Handle Add(Priority priority, Args&&... args) {
