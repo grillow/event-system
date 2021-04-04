@@ -10,7 +10,7 @@
 struct IEventListenerBase {
     virtual ~IEventListenerBase() = default;
     virtual void Receive(IEvent & event) = 0;
-    virtual std::vector<IEvent::Type_t> Types() const = 0;
+    virtual const std::vector<IEvent::Type_t> & Types() const = 0;
 };
 
 template <typename T>
@@ -26,7 +26,7 @@ struct IEventListenerResource : IEventListenerBase {
         m_callbacks[event.Type()](event);
     }
     
-    std::vector<IEvent::Type_t> Types() const override final {
+    const std::vector<IEvent::Type_t> & Types() const override final {
         return m_types;
     }
 
