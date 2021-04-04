@@ -21,7 +21,7 @@ void EventBus::Raise(std::unique_ptr<IEvent> event) {
 
 
 EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener,
-		Priority::DefaultPrioritySystem priority) {
+		Priority priority) {
     const Handle::id_t unique_id = m_generator.Get();
 
     const InternalHandle handle(unique_id);

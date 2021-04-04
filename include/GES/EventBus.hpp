@@ -54,12 +54,13 @@ public:
 
     // Add Event Listener
     template <EventListenerBaseDerived T, typename ...Args>
+
     [[nodiscard]] constexpr Handle Add(Args&&... args) {
         return Add(std::make_unique<T>(std::forward<Args>(args)...));
     }
     [[nodiscard]] Handle Add(std::unique_ptr<IEventListenerBase> listener,
-		    Priority::DefaultPrioritySystem priority =
-		    Priority::DefaultPrioritySystem::DEFAULT);
+		    Priority priority =
+		    Priority::DEFAULT);
     
     // Remove Event Listener
     void Remove(Handle && handle);
@@ -74,7 +75,7 @@ private:
         std::shared_ptr<IEventListenerBase>
     > m_listeners_handle;
    
-    std::map<Priority::DefaultPrioritySystem,
+    std::map<Priority,
         std::map<
             IEvent::Type_t,
             std::list<

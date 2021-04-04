@@ -30,7 +30,7 @@ TEST(Priority, example) {
 			[](NumberEvent & event) {
 				event.number = -event.number;
 			}),
-		Priority::DefaultPrioritySystem::HOOK
+        Priority::HOOK
 	);
 
 	bus->Raise<NumberEvent>(1337);
