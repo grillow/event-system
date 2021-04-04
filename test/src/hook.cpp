@@ -15,9 +15,9 @@ TEST(Priority, hook) {
 	int64_t number = 0;
 
 	auto receivehandle = bus->Add<IEventListenerLambda<NumberEvent>>(
-		[&](NumberEvent & event) -> void {
-			number = event.number;
-		}
+        [&](NumberEvent & event) -> void {
+            number = event.number;
+        }
 	);
 
 	EXPECT_EQ(number, 0);
@@ -26,11 +26,11 @@ TEST(Priority, hook) {
 	EXPECT_EQ(number, 1337);
 
 	auto hookhandle = bus->Add<IEventListenerLambda<NumberEvent>>(
-			Priority::HOOK,
-            [](NumberEvent & event) {
-				event.number = -event.number;
-			}
-	);
+        Priority::HOOK,
+        [](NumberEvent & event) {
+            event.number = -event.number;
+        }
+    );
 
 	bus->Raise<NumberEvent>(1337);
 	EXPECT_EQ(number, -1337);
