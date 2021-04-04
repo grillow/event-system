@@ -25,7 +25,7 @@ TEST(Priority, hook) {
 	bus->Raise<NumberEvent>(1337);
 	EXPECT_EQ(number, 1337);
 
-	auto hookhandle = bus->Add<IEventListenerLambda<NumberEvent>>(
+    auto hookhandle = bus->Add<IEventListenerLambda<NumberEvent>>(
         Priority::HOOK,
         [](NumberEvent & event) {
             event.number = -event.number;
