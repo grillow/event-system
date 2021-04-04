@@ -5,6 +5,7 @@
 #include <cstdint>
 
 
+// base interface
 struct IEvent {
     using Type_t = uint64_t;
     virtual ~IEvent() = default;
@@ -16,6 +17,7 @@ template <typename T>
 concept EventDerived = std::is_base_of<IEvent, T>::value;
 
 
+// tools
 template <typename T>
 struct IEventTemplate : IEvent {
     static const Type_t ID;
