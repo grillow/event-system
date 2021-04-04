@@ -19,32 +19,32 @@ TEST(Example, ordinary) {
 
         EXPECT_EQ(stats->GetPopulation(), 0);
 
-        bus->Raise<Event::Birth>("First");
+        bus->Raise<BirthEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Birth>("Second");
+        bus->Raise<BirthEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise<Event::Death>("Second");
+        bus->Raise<DeathEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Birth>("Third");
+        bus->Raise<BirthEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise<Event::Death>("First");
+        bus->Raise<DeathEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Death>("Third");
+        bus->Raise<DeathEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 0);
     }
 
-    bus->Raise<Event::Birth>("Fourth");
+    bus->Raise<BirthEvent>("Fourth");
     EXPECT_EQ(stats->GetPopulation(), 0);
 
 }
@@ -57,42 +57,42 @@ TEST(Example, lambda) {
    
     { 
         PopulationListenerLambdaHandler handler(bus,
-                [&](Event::Birth & event) {
+                [&](BirthEvent & event) {
                     stats->IncreasePopulation();
                 },
-                [&](Event::Death & event) {
+                [&](DeathEvent & event) {
                     stats->DecreasePopulation();
                 }
         );
 
         EXPECT_EQ(stats->GetPopulation(), 0);
 
-        bus->Raise<Event::Birth>("First");
+        bus->Raise<BirthEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Birth>("Second");
+        bus->Raise<BirthEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise<Event::Death>("Second");
+        bus->Raise<DeathEvent>("Second");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Birth>("Third");
+        bus->Raise<BirthEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 2);
 
-        bus->Raise<Event::Death>("First");
+        bus->Raise<DeathEvent>("First");
 
         EXPECT_EQ(stats->GetPopulation(), 1);
 
-        bus->Raise<Event::Death>("Third");
+        bus->Raise<DeathEvent>("Third");
 
         EXPECT_EQ(stats->GetPopulation(), 0);
     }
 
-    bus->Raise<Event::Birth>("Fourth");
+    bus->Raise<BirthEvent>("Fourth");
     EXPECT_EQ(stats->GetPopulation(), 0);
 
 }

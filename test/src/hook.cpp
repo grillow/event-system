@@ -2,37 +2,40 @@
 
 #include <GES/GES.hpp>
 
-
-struct NumberEvent : IEventTemplate<NumberEvent> {
-	NumberEvent(int64_t number) : number(number) {}
-	int64_t number;
-};
-template<> const IEvent::Type_t IEventTemplate<NumberEvent>::ID = "NumberEvent"_t;
+namespace Event {
+    struct Number : IEventTemplate<Number> {
+        Number(int64_t number) : number(number) {}
+        int64_t number;
+    };
+    template<> const IEvent::Type_t IEventTemplate<Number>::ID = "Number"_t;
+}
 
 TEST(Priority, hook) {
     auto bus = EventBus::Create();
 	
 	int64_t number = 0;
 
-    auto receivehandle = bus->Add<IEventListenerLambda<NumberEvent>>(
-        [&](NumberEvent & event) -> void {
+    // victim
+    auto receivehandle = bus->Add<IEventListenerLambda<Event::Number>>(
+        [&](Event::Number & event) -> void {
             number = event.number;
         }
     );
 
 	EXPECT_EQ(number, 0);
 	
-	bus->Raise<NumberEvent>(1337);
+	bus->Raise<Event::Number>(1337);
 	EXPECT_EQ(number, 1337);
 
-    auto hookhandle = bus->Add<IEventListenerLambda<NumberEvent>>(
+    // hook
+    auto hookhandle = bus->Add<IEventListenerLambda<Event::Number>>(
         Priority::HOOK,
-        [](NumberEvent & event) {
+        [](Event::Number & event) {
             event.number = -event.number;
         }
     );
 
-	bus->Raise<NumberEvent>(1337);
+	bus->Raise<Event::Number>(1337);
 	EXPECT_EQ(number, -1337);
 }
 
