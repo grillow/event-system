@@ -1,5 +1,5 @@
 #pragma once
-#include "Event.hpp"
+#include "ListenerBase.hpp"
 
 #include <type_traits>
 #include <functional>
@@ -8,17 +8,6 @@
 
 namespace Event {
 
-	struct IListenerBase {
-		virtual ~IListenerBase() = default;
-		virtual void Receive(IEvent & event) = 0;
-		virtual const std::vector<IEvent::Type_t> & Types() const = 0;
-	};
-
-	template <typename T>
-	concept ListenerDerived = std::is_base_of<IListenerBase, T>::value;
-
-
-	// helper, do not use it
 	struct IListenerResource : IListenerBase {
 		template <EventDerived TEvent = IEvent>
 		using callback_t = std::function<void(TEvent &)>;
@@ -44,25 +33,6 @@ namespace Event {
 			m_callbacks[T::ID] = [this](IEvent & event){ OnEvent(dynamic_cast<T &>(event)); };
 		}
 		virtual void OnEvent(T & event) = 0;
-	};
-
-
-	template <EventDerived... T>
-	struct ListenerTemplate : ListenerResourceTemplate<T>... {
-	};
-
-
-	template <EventDerived T>
-	struct Listener final : ListenerTemplate<T> {
-		constexpr Listener(IListenerResource::callback_t<T> callback) :
-			m_callback(callback) {}
-
-		void OnEvent(T & event) override final {
-			m_callback(event);
-		}
-
-	private:
-		const IListenerResource::callback_t<T> m_callback;
 	};
 
 }

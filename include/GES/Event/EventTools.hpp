@@ -1,5 +1,5 @@
 #pragma once
-#include "IEvent.hpp"
+#include "EventBase.hpp"
 
 #include <string_view>
 #include <functional>

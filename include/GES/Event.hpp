@@ -1,5 +1,5 @@
 #pragma once
 
-#include "Event/IEvent.hpp"
-#include "Event/EventTemplate.hpp"
+#include "Event/EventBase.hpp"
+#include "Event/EventTools.hpp"
 
