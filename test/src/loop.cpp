@@ -30,8 +30,6 @@ namespace Event {
         const condition_t condition;
         const iteration_t iteration;
     };
-    template<>
-    const IEvent::Type_t EventTemplate<LoopIteration>::ID = "LoopIteration"_t;
 }
 
 

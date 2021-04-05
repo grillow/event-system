@@ -19,18 +19,17 @@ namespace Event {
 
 
     // tools
+    /*constexpr*/ inline IEvent::Type_t stot (std::string_view eventName) {
+        return std::hash<std::string_view>{}(eventName);
+    }
+
     template <typename T>
     struct EventTemplate : IEvent {
-        static const Type_t ID;
+        static inline const Type_t ID = stot( typeid(T).name() );
         Type_t Type() const override final {
             return ID;
         }
     };
-
-    /*constexpr*/ inline IEvent::Type_t operator""_t (const char * eventName,
-            const std::size_t size) {
-        return std::hash<std::string_view>{}(std::string_view(eventName, size));
-    }
 
 }
 

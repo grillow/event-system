@@ -12,8 +12,6 @@ namespace Event {
 
         const uint64_t number;
     };
-    template<>
-    const IEvent::Type_t EventTemplate<Example>::ID = "Example"_t;
 }
 
 struct ExampleListener : Event::ListenerTemplate<Event::Example> {

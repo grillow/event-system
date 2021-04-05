@@ -7,7 +7,6 @@
 
 namespace Event {
     struct Empty : EventTemplate<Empty> {};
-    template<> const IEvent::Type_t EventTemplate<Empty>::ID = "Empty"_t;
 }
 
 TEST(id, uniqueness) {

@@ -2,13 +2,6 @@
 
 #include "example.hpp"
 
-namespace Event {
-    template<>
-    const IEvent::Type_t EventTemplate<Event::Birth>::ID = "Birth"_t;
-    template<>
-    const IEvent::Type_t EventTemplate<Event::Death>::ID = "Death"_t;
-}
-
 
 TEST(Example, ordinary) {
     auto bus = Event::Bus::Create();

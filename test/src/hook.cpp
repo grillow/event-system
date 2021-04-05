@@ -7,7 +7,6 @@ namespace Event {
         Number(int64_t number) : number(number) {}
         int64_t number;
     };
-    template<> const IEvent::Type_t EventTemplate<Number>::ID = "Number"_t;
 }
 
 TEST(Priority, hook) {
