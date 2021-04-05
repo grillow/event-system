@@ -29,7 +29,7 @@ TEST(Priority, hook) {
 
     // hook
     auto hookhandle = bus->Add<Event::Listener<Event::Number>>(
-        Priority::HOOK,
+        Event::Priority::HOOK,
         [](Event::Number & event) {
             event.number = -event.number;
         }

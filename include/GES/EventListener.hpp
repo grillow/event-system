@@ -1,5 +1,5 @@
 #pragma once
-#include "IEvent.hpp"
+#include "Event.hpp"
 
 #include <type_traits>
 #include <functional>

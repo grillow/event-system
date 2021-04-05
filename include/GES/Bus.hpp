@@ -1,7 +1,7 @@
 #pragma once
-#include "IEvent.hpp"
+#include "Event.hpp"
 #include "Utils/UniqueGenerator.hpp"
-#include "IEventListener.hpp"
+#include "EventListener.hpp"
 #include "Priority.hpp"
 
 #include <initializer_list>

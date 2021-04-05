@@ -40,7 +40,7 @@ struct ExampleStruct {
         std::cout << "~ExampleStruct()" << std::endl;
     }
 private:
-	Handler handler;
+    Event::Handler handler;
 };
 
 int main() {

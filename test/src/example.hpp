@@ -64,6 +64,6 @@ struct PopulationListenerHandler {
         handler.Subscribe(bus, std::make_unique<PopulationListener>(stats));
     }
 private:
-	Handler handler;
+	Event::Handler handler;
 };
 
