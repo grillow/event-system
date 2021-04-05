@@ -2,9 +2,7 @@
 #include "../Event/EventBase.hpp"
 
 #include <type_traits>
-#include <functional>
 #include <vector>
-#include <map>
 
 namespace Event {
 

@@ -1,11 +1,6 @@
 #pragma once
 #include "ListenerResource.hpp"
 
-#include <type_traits>
-#include <functional>
-#include <vector>
-#include <map>
-
 namespace Event {
 
 	template <EventDerived... T>
