@@ -10,7 +10,7 @@ const IEvent::Type_t EventTemplate<Event::Death>::ID = "Death"_t;
 
 
 TEST(Example, ordinary) {
-    auto bus = EventBus::Create();
+    auto bus = Event::Bus::Create();
     
     auto stats = std::make_shared<PopulationStats>();
    

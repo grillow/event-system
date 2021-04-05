@@ -21,7 +21,7 @@ void Bus::Raise(std::unique_ptr<IEvent> event) {
 }
 
 
-Bus::Handle Bus::Add(std::unique_ptr<IEventListenerBase> listener,
+Bus::Handle Bus::Add(std::unique_ptr<IListenerBase> listener,
 		Priority priority) {
     const Handle::id_t unique_id = m_generator.Get();
 
@@ -41,15 +41,15 @@ void Bus::Remove(Bus::Handle && handle) {
 
     InternalHandle hidden(handle);
 
-    std::shared_ptr<IEventListenerBase> ref =
-        std::shared_ptr<IEventListenerBase>(m_listeners_handle[hidden]);
+    std::shared_ptr<IListenerBase> ref =
+        std::shared_ptr<IListenerBase>(m_listeners_handle[hidden]);
 
     ///TODO: optimize
     for (auto & priority_map : m_listeners) {
         for (auto & listeners : priority_map.second) {
             auto it = listeners.second.begin();
             while (it != listeners.second.end()) {
-                if (std::shared_ptr<IEventListenerBase>(*it) == ref) {
+                if (std::shared_ptr<IListenerBase>(*it) == ref) {
                     it = listeners.second.erase(it);
                 } else {
                     ++it;

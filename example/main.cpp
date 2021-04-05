@@ -1,11 +1,10 @@
 #include <iostream>
-#include <GES/EventBus.hpp>
-#include <GES/Handler.hpp>
+#include <GES/GES.hpp>
 
 #include <list>
 
 
-std::shared_ptr<EventBus> bus = EventBus::Create(); // global :3
+std::shared_ptr<Event::Bus> bus = Event::Bus::Create(); // global :3
 
 namespace Event {
     struct Example : EventTemplate<Example> {
@@ -17,8 +16,8 @@ namespace Event {
     const IEvent::Type_t EventTemplate<Example>::ID = "Example"_t;
 }
 
-struct ExampleEventListener : EventListener<Event::Example> {
-    ExampleEventListener(std::string name) : m_name(std::move(name)) {}
+struct ExampleListener : Event::ListenerTemplate<Event::Example> {
+    ExampleListener(std::string name) : m_name(std::move(name)) {}
 
     virtual void OnEvent(Event::Example & event) override {
         std::cout << m_name << " received: " << event.number << std::endl;
@@ -32,9 +31,9 @@ private:
 struct ExampleStruct {
     ExampleStruct() {
         std::cout << "ExampleStruct()" << std::endl;
-        handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerA"));
+        handler.Subscribe(bus, std::make_unique<ExampleListener>("ListenerA"));
         bus->Raise<Event::Example>(808);
-       	handler.Subscribe(bus, std::make_unique<ExampleEventListener>("ListenerB"));
+       	handler.Subscribe(bus, std::make_unique<ExampleListener>("ListenerB"));
     }
 
     ~ExampleStruct() {

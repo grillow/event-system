@@ -11,11 +11,11 @@ namespace Event {
 }
 
 TEST(Lambda, simple) {
-    std::shared_ptr<EventBus> bus = EventBus::Create();
+    std::shared_ptr<Event::Bus> bus = Event::Bus::Create();
     int64_t number = 0;
 
     auto handle1 = bus->Add(
-	std::make_unique<EventListenerLambda<Event::Add>>(
+	std::make_unique<Event::Listener<Event::Add>>(
 	    [&](Event::Add & event) -> void {
 		    number += event.number;
 	    }

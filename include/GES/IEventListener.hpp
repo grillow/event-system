@@ -15,7 +15,7 @@ namespace Event {
 	};
 
 	template <typename T>
-	concept ListenerBaseDerived = std::is_base_of<IListenerBase, T>::value;
+	concept ListenerDerived = std::is_base_of<IListenerBase, T>::value;
 
 
 	// helper, do not use it

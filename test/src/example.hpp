@@ -36,7 +36,7 @@ private:
 
 
 struct PopulationListener :
-    EventListener<Event::Birth, Event::Death> {
+    Event::ListenerTemplate<Event::Birth, Event::Death> {
 
     PopulationListener(std::weak_ptr<PopulationStats> stats) :
         m_stats(stats) {}
@@ -59,7 +59,7 @@ private:
 
 
 struct PopulationListenerHandler {
-    PopulationListenerHandler(std::shared_ptr<EventBus> bus,
+    PopulationListenerHandler(std::shared_ptr<Event::Bus> bus,
             std::weak_ptr<PopulationStats> stats) {
         handler.Subscribe(bus, std::make_unique<PopulationListener>(stats));
     }
