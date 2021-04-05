@@ -11,7 +11,7 @@ namespace Event {
         using iteration_t = std::function<void(LoopIteration &)>;
         
         LoopIteration(
-                    std::shared_ptr<EventBus> bus,
+                    std::shared_ptr<Event::Bus> bus,
                     condition_t condition,
                     iteration_t iteration
                 )
@@ -26,12 +26,10 @@ namespace Event {
         }
 
     private:
-        std::shared_ptr<EventBus> bus;
+        std::shared_ptr<Event::Bus> bus;
         const condition_t condition;
         const iteration_t iteration;
     };
-    template<>
-    const IEvent::Type_t EventTemplate<LoopIteration>::ID = "LoopIteration"_t;
 }
 
 
@@ -40,7 +38,7 @@ TEST(Loop, simple) {
     const size_t last_i = 10;
 
     // true modern C++ for loop
-    auto bus = EventBus::Create();
+    auto bus = Event::Bus::Create();
 
     size_t events_created = 0;
     size_t iteration_called = 0;
@@ -48,7 +46,7 @@ TEST(Loop, simple) {
     size_t i = first_i;
     size_t sum = 0;
 
-    auto handle = bus->Add<EventListenerLambda<Event::LoopIteration>>(
+    auto handle = bus->Add<Event::Listener<Event::LoopIteration>>(
         [&](Event::LoopIteration & event) {
             ++events_created;
         }

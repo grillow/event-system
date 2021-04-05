@@ -1,61 +1,58 @@
-#include "EventBus.hpp"
+#include "Bus.hpp"
 
+using namespace Event;
 
 /*
- *  EventBus::Handle
+ *  Bus::Handle
  */
 
-EventBus::Handle::Handle(EventBus::Handle && other) :
-    EventBus::Handle(other.m_bus, other.m_id) {
-    other.m_bus = std::shared_ptr<EventBus>(nullptr);
+Bus::Handle::Handle(Bus::Handle && other) :
+    Bus::Handle(other.m_bus, other.m_id) {
+    other.m_bus = std::shared_ptr<Bus>(nullptr);
 }
 
-EventBus::Handle & EventBus::Handle::operator= (EventBus::Handle && other) {
+Bus::Handle & Bus::Handle::operator= (Bus::Handle && other) {
     m_bus = other.m_bus;
     m_id  = other.m_id;
 
-    other.m_bus = std::shared_ptr<EventBus>(nullptr);
+    other.m_bus = std::shared_ptr<Bus>(nullptr);
 
     return *this;
 }
 
-void EventBus::Handle::Release() {
+void Bus::Handle::Release() {
     if (auto bus = m_bus.lock()) {
         bus->Remove(std::move(*this));
     }
 }
 
-bool EventBus::Handle::Active() const {
+bool Bus::Handle::Active() const {
     return !m_bus.expired();
 }
 
-EventBus::Handle::~Handle() {
+Bus::Handle::~Handle() {
     Release();
-    m_bus = std::shared_ptr<EventBus>(nullptr);
-}
-
-bool operator< (const EventBus::Handle & left, const EventBus::Handle & right) {
-    return left.m_id < right.m_id;
+    m_bus = std::shared_ptr<Bus>(nullptr);
 }
 
 
-EventBus::Handle::Handle(std::weak_ptr<EventBus> bus, const id_t id) :
+Bus::Handle::Handle(std::weak_ptr<Bus> bus, const id_t id) :
         m_bus(bus),
         m_id(id)
     {}
 
 
 /*
- *  EventBus::InternalHandle
+ *  Bus::InternalHandle
  */
 
-EventBus::InternalHandle::InternalHandle(
-        const EventBus::Handle::id_t id) :
+Bus::InternalHandle::InternalHandle(
+        const Bus::Handle::id_t id) :
         m_id(id)
     {}
 
-EventBus::InternalHandle::InternalHandle(
-        const EventBus::Handle & handle) :
+Bus::InternalHandle::InternalHandle(
+        const Bus::Handle & handle) :
         m_id(handle.m_id)
     {}
 

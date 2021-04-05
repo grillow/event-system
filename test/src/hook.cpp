@@ -7,16 +7,15 @@ namespace Event {
         Number(int64_t number) : number(number) {}
         int64_t number;
     };
-    template<> const IEvent::Type_t EventTemplate<Number>::ID = "Number"_t;
 }
 
 TEST(Priority, hook) {
-    auto bus = EventBus::Create();
+    auto bus = Event::Bus::Create();
 	
 	int64_t number = 0;
 
     // victim
-    auto receivehandle = bus->Add<EventListenerLambda<Event::Number>>(
+    auto receivehandle = bus->Add<Event::Listener<Event::Number>>(
         [&](Event::Number & event) -> void {
             number = event.number;
         }
@@ -28,8 +27,8 @@ TEST(Priority, hook) {
 	EXPECT_EQ(number, 1337);
 
     // hook
-    auto hookhandle = bus->Add<EventListenerLambda<Event::Number>>(
-        Priority::HOOK,
+    auto hookhandle = bus->Add<Event::Listener<Event::Number>>(
+        Event::Priority::HOOK,
         [](Event::Number & event) {
             event.number = -event.number;
         }

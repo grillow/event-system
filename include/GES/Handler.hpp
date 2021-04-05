@@ -1,13 +1,19 @@
 #pragma once
-#include "EventBus.hpp"
+#include "Bus.hpp"
 
 #include <list>
 
-struct Handler final {
-    void Subscribe(std::shared_ptr<EventBus> bus,
-		    std::unique_ptr<IEventListenerBase> listener);
+namespace Event {
 
-private:
-    std::list<EventBus::Handle> m_handles;
-};
+    struct Handler final {
+        void Subscribe(std::shared_ptr<Event::Bus> bus,
+                std::unique_ptr<Event::IListenerBase> listener) {
+            m_handles.emplace_back(bus->Add(std::move(listener)));
+        }
+
+    private:
+        std::list<Event::Bus::Handle> m_handles;
+    };
+
+}
 

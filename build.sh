@@ -9,8 +9,8 @@ BIN_PATH="$SCRIPT_DIR_PATH/bin"
 # [ -e $BUILD_PATH ] && rm -r $BUILD_PATH/*
 mkdir -p $BUILD_PATH
 cd $BUILD_PATH
-time cmake ..  || exit 1
+cmake ..  || exit 1
 time make      || exit 1
-time make test || exit 1
-time valgrind --error-exitcode=1 --leak-check=full -s $BIN_PATH/Test
+make test || exit 1
+valgrind --error-exitcode=1 --leak-check=full -s $BIN_PATH/Test
 

@@ -7,15 +7,14 @@ namespace Event {
         Add(int64_t number) : number(number) {}
         const int64_t number;
     };
-    template<> const IEvent::Type_t EventTemplate<Add>::ID = "Add"_t;
 }
 
 TEST(Lambda, simple) {
-    std::shared_ptr<EventBus> bus = EventBus::Create();
+    std::shared_ptr<Event::Bus> bus = Event::Bus::Create();
     int64_t number = 0;
 
     auto handle1 = bus->Add(
-	std::make_unique<EventListenerLambda<Event::Add>>(
+	std::make_unique<Event::Listener<Event::Add>>(
 	    [&](Event::Add & event) -> void {
 		    number += event.number;
 	    }
