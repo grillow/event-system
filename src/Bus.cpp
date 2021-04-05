@@ -1,17 +1,18 @@
-#include "EventBus.hpp"
+#include "Bus.hpp"
 
+using namespace Event;
 
-std::shared_ptr<EventBus> EventBus::Create() {
-    auto bus = std::make_shared<EventBus>(std::shared_ptr<EventBus>(nullptr));
+std::shared_ptr<Bus> Bus::Create() {
+    auto bus = std::make_shared<Bus>(std::shared_ptr<Bus>(nullptr));
     bus->m_bus = bus;
     return bus;
 }
 
 
-EventBus::EventBus(std::weak_ptr<EventBus> bus) : m_bus(bus) {}
+Bus::Bus(std::weak_ptr<Bus> bus) : m_bus(bus) {}
 
 
-void EventBus::Raise(std::unique_ptr<IEvent> event) {
+void Bus::Raise(std::unique_ptr<IEvent> event) {
     for (auto & priority_map : m_listeners) {
         for (auto & listener : priority_map.second[event->Type()]) {
             listener.lock()->Receive(*event);
@@ -20,7 +21,7 @@ void EventBus::Raise(std::unique_ptr<IEvent> event) {
 }
 
 
-EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener,
+Bus::Handle Bus::Add(std::unique_ptr<IEventListenerBase> listener,
 		Priority priority) {
     const Handle::id_t unique_id = m_generator.Get();
 
@@ -34,7 +35,7 @@ EventBus::Handle EventBus::Add(std::unique_ptr<IEventListenerBase> listener,
 }
 
 
-void EventBus::Remove(EventBus::Handle && handle) {
+void Bus::Remove(Bus::Handle && handle) {
     const Handle::id_t unique_id = handle.m_id;
     m_generator.Release(unique_id);
 

@@ -10,15 +10,16 @@
 #include <list>
 #include <map>
 
+namespace Event {
 
-class EventBus final {
+class Bus final {
 public:
     /*
-     *  EventBus::Handle
+     *  Bus::Handle
      */
 
     struct Handle final {
-        friend class EventBus;
+        friend class Bus;
 
         using id_t = uint64_t;
 
@@ -33,17 +34,17 @@ public:
         friend bool operator< (const Handle & left, const Handle & right);
 
     private:
-        Handle(std::weak_ptr<EventBus> bus, const id_t id);
+        Handle(std::weak_ptr<Bus> bus, const id_t id);
 
-        std::weak_ptr<EventBus> m_bus;
+        std::weak_ptr<Bus> m_bus;
         id_t m_id;
     };
 
 public:
-    static std::shared_ptr<EventBus> Create();
+    static std::shared_ptr<Bus> Create();
 
-    EventBus(std::weak_ptr<EventBus> bus);    ///TODO: make it private
-    EventBus(const EventBus & other) = delete;
+    Bus(std::weak_ptr<Bus> bus);    ///TODO: make it private
+    Bus(const Bus & other) = delete;
 
     // Raise Event
     template <EventDerived T, typename ...Args>
@@ -68,7 +69,7 @@ public:
     void Remove(Handle && handle);
 
 private:
-    std::weak_ptr<EventBus> m_bus;
+    std::weak_ptr<Bus> m_bus;
     struct InternalHandle;
 
         
@@ -86,15 +87,15 @@ private:
         >
     > m_listeners;
 
-    UniqueGenerator<EventBus::Handle::id_t> m_generator;
+    UniqueGenerator<Bus::Handle::id_t> m_generator;
 };
 
 
 /*
- *  EventBus::InternalHandle
+ *  Bus::InternalHandle
  */
 
-struct EventBus::InternalHandle final {
+struct Bus::InternalHandle final {
     explicit InternalHandle(const Handle::id_t id);
     explicit InternalHandle(const Handle & handle);
 
