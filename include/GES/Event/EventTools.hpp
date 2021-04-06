@@ -12,7 +12,7 @@ namespace Event {
 
     template <typename T>
     struct EventTemplate : IEvent {
-        static inline const Type_t ID = stot( typeid(T).name() );
+        /*constexpr*/ static inline const Type_t ID = stot( typeid(T).name() );
         Type_t Type() const override final {
             return ID;
         }
