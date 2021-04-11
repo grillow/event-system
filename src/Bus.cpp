@@ -28,9 +28,7 @@ Bus::Handle Bus::Add(std::unique_ptr<IListenerBase> listener,
     const InternalHandle handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
     auto ref = m_listeners_handle[handle];
-    for (auto type : ref->Types()) {
-        m_listeners[priority][type].emplace_back(ref);
-    }
+        m_listeners[priority][ref->Type()].emplace_back(ref);
     return Handle(m_bus, handle.m_id);
 }
 

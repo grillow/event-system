@@ -1,11 +1,11 @@
 #pragma once
 #include <type_traits>
-#include <cstdint>
+#include <string_view>
 
 namespace Event {
 
     struct IEvent {
-        using Type_t = uint64_t;
+        using Type_t = std::string_view;
         virtual ~IEvent() = default;
         virtual Type_t Type() const = 0;
     };
