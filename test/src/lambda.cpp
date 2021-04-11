@@ -13,7 +13,7 @@ TEST(Lambda, simple) {
     std::shared_ptr<Event::Bus> bus = Event::Bus::Create();
     int64_t number = 0;
 
-    auto handle1 = bus->Add(
+    auto handle = bus->Add(
 	std::make_unique<Event::Listener<Event::Add>>(
 	    [&](Event::Add & event) -> void {
 		    number += event.number;
