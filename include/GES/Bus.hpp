@@ -7,6 +7,7 @@
 #include <initializer_list>
 #include <memory>
 #include <mutex>
+#include <queue>
 #include <array>
 #include <list>
 #include <map>
@@ -55,6 +56,15 @@ namespace Event {
             Raise(std::make_unique<T>(std::forward<Args>(args)...));
         }
         void Raise(std::unique_ptr<IEvent> event);
+	
+		// Push Event without raising
+        template <EventDerived T, typename ...Args>
+        constexpr void Push(Args&&... args) {
+            Push(std::make_unique<T>(std::forward<Args>(args)...));
+        }
+		void Push(std::unique_ptr<IEvent> event);
+		// Raise all events from queue
+		void RaiseAll();
 
         // Add Event Listener
         template <ListenerDerived T, typename ...Args>
@@ -90,6 +100,8 @@ namespace Event {
                 >
             >
         > m_listeners;
+
+		std::queue<std::unique_ptr<IEvent>> m_events;
 
         UniqueGenerator<Bus::Handle::id_t> m_generator;
     };

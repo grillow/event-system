@@ -22,6 +22,24 @@ void Bus::Raise(std::unique_ptr<IEvent> event) {
     }
 }
 
+void Bus::Push(std::unique_ptr<IEvent> event) {
+	std::lock_guard<std::mutex> lock(m_mutex);
+
+	m_events.emplace(std::move(event));
+}
+
+#include <iostream>
+void Bus::RaiseAll() {
+	std::lock_guard<std::mutex> lock(m_mutex);
+
+	while(!m_events.empty()) {
+		std::cout << m_events.size() << '\n';
+		Raise(std::move(m_events.front()));
+		std::cout << m_events.size() << '\n';
+		m_events.pop();
+		std::cout << m_events.size() << '\n';
+	}
+}
 
 Bus::Handle Bus::Add(std::unique_ptr<IListenerBase> listener,
 		Priority priority) {
