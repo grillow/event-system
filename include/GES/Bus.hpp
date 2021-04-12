@@ -6,6 +6,7 @@
 
 #include <initializer_list>
 #include <memory>
+#include <mutex>
 #include <array>
 #include <list>
 #include <map>
@@ -72,8 +73,9 @@ namespace Event {
 
     private:
         std::weak_ptr<Bus> m_bus;
-        struct InternalHandle;
-
+		std::mutex m_mutex;
+		
+		struct InternalHandle;
             
         std::map<
             InternalHandle,

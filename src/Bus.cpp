@@ -13,7 +13,9 @@ Bus::Bus(std::weak_ptr<Bus> bus) : m_bus(bus) {}
 
 
 void Bus::Raise(std::unique_ptr<IEvent> event) {
-    for (auto & priority_map : m_listeners) {
+	std::lock_guard<std::mutex> lock(m_mutex);
+    
+	for (auto & priority_map : m_listeners) {
         for (auto & listener : priority_map.second[event->Type()]) {
             listener.lock()->Receive(*event);
         }
@@ -23,7 +25,9 @@ void Bus::Raise(std::unique_ptr<IEvent> event) {
 
 Bus::Handle Bus::Add(std::unique_ptr<IListenerBase> listener,
 		Priority priority) {
-    const Handle::id_t unique_id = m_generator.Get();
+	std::lock_guard<std::mutex> lock(m_mutex);
+
+	const Handle::id_t unique_id = m_generator.Get();
 
     const InternalHandle handle(unique_id);
     m_listeners_handle[handle] = std::move(listener);
@@ -34,7 +38,9 @@ Bus::Handle Bus::Add(std::unique_ptr<IListenerBase> listener,
 
 
 void Bus::Remove(Bus::Handle && handle) {
-    const Handle::id_t unique_id = handle.m_id;
+	std::lock_guard<std::mutex> lock(m_mutex);
+	
+	const Handle::id_t unique_id = handle.m_id;
     m_generator.Release(unique_id);
 
     InternalHandle hidden(handle);
